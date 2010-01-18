@@ -1,5 +1,10 @@
 #include "gp.h"
 
+GP::GP()
+{
+  initialize();
+}
+
 void GP::initialize()
 {
   
