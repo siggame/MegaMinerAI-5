@@ -1,0 +1,40 @@
+//Copyright (C) 2009 - Missouri S&T ACM AI Team
+//Please do not modify this file while building your AI
+//See AI.h & AI.cpp for that
+#ifndef STRUCTURES_H
+#define STRUCTURES_H
+
+#include <iostream>
+#include <vector>
+
+% for model in models:
+struct ${model.name}
+{
+  % for key in model.data.keys():
+  ${conversions[model.data[key]]} ${key};
+  % endfor
+  
+  friend std::ostream& operator<<(std::ostream& stream, ${model.name} obj);
+};
+
+% endfor
+
+struct GameState
+{
+  % for model in models:
+  std::vector<${model.name}> ${lowercase(model.name)}s;
+  %  endfor
+  
+  % for datum in globals:
+  ${conversions[datum.type]} ${datum.name};
+  % endfor
+  
+  friend std::ostream& operator<<(std::ostream& stream, GameState obj);
+};
+
+struct Game
+{
+  std::vector<GameState> states;
+};
+
+#endif

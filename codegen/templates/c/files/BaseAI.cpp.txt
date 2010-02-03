@@ -1,0 +1,34 @@
+//Copyright (C) 2009 - Missouri S&T ACM AI Team
+//Please do not modify this file while building your AI
+//See AI.h & AI.cpp for that
+
+#include "BaseAI.h"
+#include "game.h"
+
+% for datum in globals:
+${conversions[datum.type]} BaseAI::${datum.name}()
+{
+  return get${capitalize(datum.name)}();
+}
+% endfor
+
+bool BaseAI::startTurn()
+{
+  static bool initialized = false;
+  int count = 0;
+  % for model in models:
+  count = get${model.name}Count();
+  ${lowercase(model.name)}s.clear();
+  ${lowercase(model.name)}s.resize(count);
+  for(int i = 0; i < count; i++)
+  {
+    ${lowercase(model.name)}s[i] = ${model.name}(get${model.name}(i));
+  }
+  % endfor
+  if(!initialized)
+  {
+    initialized = true;
+    init();
+  }
+  run();
+}

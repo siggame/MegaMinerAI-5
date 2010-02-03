@@ -1,0 +1,50 @@
+import com.sun.jna.Library;
+import com.sun.jna.Pointer;
+import com.sun.jna.Native;
+
+public interface Client extends Library {
+    Client INSTANCE = (Client)Native.loadLibrary("client", Client.class);
+    int open_server_connection(String host, String port);
+
+    boolean serverLogin(int socket, String username, String password);
+    int createGame();
+    int joinGame(int id);
+
+    void endTurn();
+    void getStatus();
+
+    int networkLoop(int socket);
+
+
+    //commands
+% for  model in models:
+%   for func in model.functions.keys():
+    boolean ${model.name.lower()}${capitalize(func)}(${conversions[model]} object\
+%     for arg in model.functions[func]:
+, \
+${conversions[arg[1]]} ${arg[0]}\
+%     endfor
+);
+%   endfor
+% endfor
+
+    //accessors
+% for datum in globals:
+    ${conversions[datum.type]} get${capitalize(datum.name)}();
+% endfor
+
+% for model in models:
+    Pointer get${model.name}(int num);
+    int get${model.name}Count();
+% endfor
+
+
+    //getters
+% for model in models:
+%   for key in model.data.keys():
+    ${conversions[model.data[key]]} ${lowercase(model.name)}Get${capitalize(key)}(Pointer ptr);
+%   endfor
+
+% endfor
+
+}

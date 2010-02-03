@@ -1,0 +1,62 @@
+# -*- python -*-
+
+from library import library
+
+from ExistentialError import ExistentialError
+
+class GameObject(object):
+  def __init__(self, ptr):
+    from BaseAI import BaseAI
+    self.ptr = ptr
+    self.iteration = BaseAI.iteration
+
+%for model in models:
+
+class ${model.name}(GameObject):
+%  if model.doc:
+  """${model.doc}
+  """
+%  endif
+  def __init__(self, ptr):
+    from BaseAI import BaseAI
+    self.ptr = ptr
+    self.iteration = BaseAI.iteration
+    
+    self.ID = library.${lowercase(model.name)}Get${capitalize(model.key)}(ptr)
+  
+  def validify(self):
+    from BaseAI import BaseAI
+    #if this class is pointing to an object from before the current turn it's probably
+    #somewhere else in memory now
+    if self.iteration == BaseAI.iteration:
+      return True
+    for i in BaseAI.${lowercase(model.name)}s:
+      if i.ID == self.ID:
+        self.ptr = i.ptr
+        self.iteration = BaseAI.iteration
+        return True
+    raise ExistentialError()
+%  for func in model.functions.keys():
+  def ${func}(self\
+%    for arg in model.functions[func]:
+, ${arg[0]}\
+%    endfor
+):
+    self.validify()
+%    for arg in model.functions[func]:
+%      if isinstance(arg[1], Model):
+    if ${arg[0]}.__class__ not in [${arg[1].name}]:
+      raise TypeError('${arg[0]} should be of [${arg[1].name}]')
+    ${arg[0]}.validify()
+%      endif
+%    endfor
+    return library.${lowercase(model.name)}${capitalize(func)}(self.ptr)
+
+%  endfor
+%  for key in model.data.keys():
+  def get${capitalize(key)}(self):
+    self.validify()
+    return library.${lowercase(model.name)}Get${capitalize(key)}(self.ptr)
+
+%  endfor
+%endfor

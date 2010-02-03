@@ -1,0 +1,11 @@
+#include "getters.h"
+
+% for model in models:
+%   for key in model.data.keys():
+${conversions[model.data[key]]} ${lowercase(model.name)}Get${capitalize(key)}(_${model.name}* ptr)
+{
+  return ptr->${key};
+}
+%   endfor
+% endfor
+

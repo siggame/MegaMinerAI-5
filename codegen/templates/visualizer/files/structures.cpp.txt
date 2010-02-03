@@ -1,0 +1,30 @@
+// -*-c++-*-
+
+#include "structures.h"
+
+#include <iostream>
+
+% for model in models:
+
+std::ostream& operator<<(std::ostream& stream, ${model.name} ob)
+{
+  % for key in model.data.keys():
+  stream << "${key}: " << ob.${key}  <<'\n';
+  % endfor
+  return stream;
+}
+
+std::ostream& operator<<(std::ostream& stream, GameState ob)
+{
+  % for datum in globals:
+  stream << "${datum.name}: " << ob.${datum.name}  <<'\n';
+  % endfor
+  
+  % for model in models:
+  stream << "\n\n${model.name}s:\n";
+  for(std::vector<${model.name}>::iterator i = ob.${lowercase(model.name)}s.begin(); i != ob.${lowercase(model.name)}s.end(); i++)
+    stream << *i << '\n';
+  % endfor
+}
+
+% endfor

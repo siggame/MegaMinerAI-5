@@ -1,0 +1,126 @@
+#include "parser.h"
+#include "sexp/sexp.h"
+
+#include <cstdio>
+#include <cstring>
+
+using namespace std;
+
+
+% for model in models:
+static void parse${model.name}(${model.name}& object, sexp_t* expression)
+{
+  sexp_t* sub;
+  sub = expression->list;
+  
+  % for key in model.data.keys():
+  %if model.data[key] == int:
+  object.${key} = atoi(sub->val);
+  %elif model.data[key] == float:
+  object.${key} = atof(sub->val);
+  %elif model.data[key] == str:
+  object.${key} = new char[strlen(sub->val)+1];
+  strncpy(object->${key}, sub->val, strlen(sub->val));
+  object.${key}[strlen(sub->val)] = 0;
+  %endif
+  sub = sub->next;
+  %endfor
+  
+}
+% endfor
+
+static bool parseSexp(Game& game, sexp_t* expression)
+{
+  sexp_t* sub, *subsub;
+  expression = expression->list;
+  if(expression->val != NULL && strcmp(expression->val, "status") == 0)
+  {
+    GameState gs;
+    while(expression->next != NULL)
+    {
+      expression = expression->next;
+      sub = expression->list;
+      if(string(sub->val) == "game")
+      {
+        sub = sub->next;
+        gs.turnNumber = atoi(sub->val);
+        sub = sub->next;
+          
+        subsub = sub->list;
+        gs.player0Light = atoi(subsub->val);
+        subsub = subsub->next;
+        gs.player0Water = atoi(subsub->val);
+        subsub = subsub->next;
+          
+        sub = sub->next;
+          
+        subsub = sub->list;
+        gs.player1Light = atoi(subsub->val);
+        subsub = subsub->next;
+        gs.player1Water = atoi(subsub->val);
+        subsub = subsub->next;
+        
+        sub = sub->next;
+          
+        gs.maxX = atoi(sub->val);
+        gs.maxY = atoi(sub->val);
+      }
+      % for model in models:
+      else if(string(sub->val) == "${model.name}")
+      {
+        sub = sub->next;
+        while(sub)
+        {
+          ${model.name} object;
+          parse${model.name}(object, sub);
+          gs.${lowercase(model.name)}s.push_back(object);
+          
+          sub = sub->next;
+        }
+      }
+      % endfor
+    }
+    game.states.push_back(gs);
+  }
+}
+
+bool parseFile(Game& game, char* filename)
+{
+  bool value;
+  FILE* in = fopen(filename, "r");
+  int size;
+  if(!in)
+    return false;
+  
+  fseek(in, 0, SEEK_END);
+  size = ftell(in);
+  fseek(in, 0L, SEEK_SET);
+  
+  char* buffer = new char[size+1];
+  fread(buffer, 1, size, in);
+  buffer[size] = 0;
+  
+  fclose(in);
+  
+  value = parseString(game, buffer);
+  
+  delete[] buffer;
+  
+  return value;
+}
+
+
+bool parseString(Game& game, char* string)
+{
+  sexp_t* st = NULL;
+  pcont_t* cc;
+  cc = init_continuation(string);
+  
+  while(st = iparse_sexp( string, strlen(string), cc))
+  {
+    parseSexp(game, st);
+    destroy_sexp(st);
+  }
+  
+  return true;
+}
