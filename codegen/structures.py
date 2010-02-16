@@ -45,6 +45,20 @@ class Global(object):
     self.type = type
     self.doc = doc
 
+class Animation(object):
+  name = ''
+  data = OrderedDict()
+  
+  def __init__(self, name, **kwargs):
+    self.data = OrderedDict()
+    self.name = name
+    if 'data' in kwargs:
+      data = kwargs['data']
+      for key, value in data:
+        if key in self.data:
+          raise ValueError('Duplicate datum %s in %s' % (key, name))
+        self.data[key] = value
+
 """
 TODO: Write these.
 class Message(object):

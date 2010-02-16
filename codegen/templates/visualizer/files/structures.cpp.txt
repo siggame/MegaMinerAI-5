@@ -14,6 +14,21 @@ std::ostream& operator<<(std::ostream& stream, ${model.name} ob)
   return stream;
 }
 
+% endfor
+
+% for animation in animations:
+
+std::ostream& operator<<(std::ostream& stream, ${animation.name} ob)
+{
+  stream << "${animation.name}" << "\n";
+  % for key in animation.data.keys():
+  stream << "${key}: " << ob.${key}  <<'\n';
+  % endfor
+  return stream;
+}
+
+% endfor
+
 std::ostream& operator<<(std::ostream& stream, GameState ob)
 {
   % for datum in globals:
@@ -25,6 +40,17 @@ std::ostream& operator<<(std::ostream& stream, GameState ob)
   for(std::vector<${model.name}>::iterator i = ob.${lowercase(model.name)}s.begin(); i != ob.${lowercase(model.name)}s.end(); i++)
     stream << *i << '\n';
   % endfor
+  stream << "\nAnimation\n";
+  for(std::vector<Animation*>::iterator i = ob.animations.begin(); i != ob.animations.end(); i++)
+  {
+  % for animation in animations:
+    if((**i).type == ${animation.name.upper()})
+      stream << *((${animation.name}*)*i) << "\n";
+  % endfor
+  }
 }
 
-% endfor
+Game::Game()
+{
+  winner = -1;
+}

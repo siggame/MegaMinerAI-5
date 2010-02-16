@@ -20,7 +20,31 @@ static void parse${model.name}(${model.name}& object, sexp_t* expression)
   object.${key} = atof(sub->val);
   %elif model.data[key] == str:
   object.${key} = new char[strlen(sub->val)+1];
-  strncpy(object->${key}, sub->val, strlen(sub->val));
+  strncpy(object.${key}, sub->val, strlen(sub->val));
+  object.${key}[strlen(sub->val)] = 0;
+  %endif
+  sub = sub->next;
+  %endfor
+  
+}
+% endfor
+
+% for animation in animations:
+static void parse${capitalize(animation.name)}(${animation.name}& object, sexp_t* expression)
+{
+  sexp_t* sub;
+  sub = expression->next;
+  
+  object.type = ${animation.name.upper()};
+  
+  % for key in animation.data.keys():
+  %if animation.data[key] == int:
+  object.${key} = atoi(sub->val);
+  %elif animation.data[key] == float:
+  object.${key} = atof(sub->val);
+  %elif animation.data[key] == str:
+  object.${key} = new char[strlen(sub->val)+1];
+  strncpy(object.${key}, sub->val, strlen(sub->val));
   object.${key}[strlen(sub->val)] = 0;
   %endif
   sub = sub->next;
@@ -42,28 +66,20 @@ static bool parseSexp(Game& game, sexp_t* expression)
       sub = expression->list;
       if(string(sub->val) == "game")
       {
-        sub = sub->next;
-        gs.turnNumber = atoi(sub->val);
-        sub = sub->next;
+          sub = sub->next;
+          gs.turnNumber = atoi(sub->val);
+          sub = sub->next;
           
-        subsub = sub->list;
-        gs.player0Light = atoi(subsub->val);
-        subsub = subsub->next;
-        gs.player0Water = atoi(subsub->val);
-        subsub = subsub->next;
+          gs.player0Score = atoi(sub->val);
+          sub = sub->next;
           
-        sub = sub->next;
+          gs.player1Score = atoi(sub->val);
+          sub = sub->next;
           
-        subsub = sub->list;
-        gs.player1Light = atoi(subsub->val);
-        subsub = subsub->next;
-        gs.player1Water = atoi(subsub->val);
-        subsub = subsub->next;
-        
-        sub = sub->next;
+          gs.maxX = atoi(sub->val);
+          sub = sub->next;
           
-        gs.maxX = atoi(sub->val);
-        gs.maxY = atoi(sub->val);
+          gs.maxY = atoi(sub->val);
       }
       % for model in models:
       else if(string(sub->val) == "${model.name}")
@@ -81,6 +97,45 @@ static bool parseSexp(Game& game, sexp_t* expression)
       % endfor
     }
     game.states.push_back(gs);
+  }
+  else if(string(expression->val) == "animations")
+  {
+    std::vector<Animation*> animations;
+    while(expression->next)
+    {
+      expression = expression->next;
+      sub = expression->list;
+      % for animation in animations:
+      if(string(sub->val) == "${dashify(animation.name)}")
+      {
+        ${animation.name}* animation = new ${animation.name};
+        parse${capitalize(animation.name)}(*animation, sub);
+        animations.push_back(animation);
+      }
+      % endfor
+    }
+    game.states[game.states.size()-1].animations = animations;
+  }
+  else if(string(expression->val) == "ident")
+  {
+    expression = expression->next;
+    sub = expression->list;
+    while(sub)
+    {
+      subsub = sub->list;
+      int number = atoi(subsub->val);
+      if(number > 0)
+      {
+        subsub = subsub->next->next;
+        game.players[number] = subsub->val;
+      }
+      sub = sub->next;
+    }
+  }
+  else if(string(expression->val) == "game-winner")
+  {
+    expression = expression->next;
+    game.winner = atoi(expression->val);
   }
 }
 

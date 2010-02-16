@@ -6,6 +6,11 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
+
+% for i, animation in enumerate(animations):
+const int ${animation.name.upper()} = ${i};
+% endfor
 
 % for model in models:
 struct ${model.name}
@@ -15,6 +20,23 @@ struct ${model.name}
   % endfor
   
   friend std::ostream& operator<<(std::ostream& stream, ${model.name} obj);
+};
+
+% endfor
+
+struct Animation
+{
+  int type;
+};
+
+% for animation in animations:
+struct ${animation.name} : public Animation
+{
+  % for key in animation.data.keys():
+  ${conversions[animation.data[key]]} ${key};
+  % endfor
+  
+  friend std::ostream& operator<<(std::ostream& stream, ${animation.name} obj);
 };
 
 % endfor
@@ -29,12 +51,17 @@ struct GameState
   ${conversions[datum.type]} ${datum.name};
   % endfor
   
+  std::vector<Animation*> animations;
   friend std::ostream& operator<<(std::ostream& stream, GameState obj);
 };
 
 struct Game
 {
   std::vector<GameState> states;
+  std::string players[2];
+  int winner;
+
+  Game();
 };
 
 #endif

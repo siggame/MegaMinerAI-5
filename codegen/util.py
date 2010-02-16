@@ -15,9 +15,11 @@ def lowercase(str):
   return str[0].lower() + str[1:]
 
 def dashify(str):
-    result = ''
-    for i in str:
-        if i in string.uppercase:
-            result += '-'
-        result += i.lower()
-    return result
+  if not str:
+    return str
+  result = str[0].lower()
+  for i in str[1:]:
+    if i in string.uppercase:
+      result += '-'
+    result += i.lower()
+  return result

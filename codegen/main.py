@@ -1,3 +1,4 @@
+#!/bin/env python
 import data
 import structures
 from util import *
@@ -10,12 +11,15 @@ def insertModel(list, model):
 def parseData():
   models = []
   globals = []
+  animations = []
   for i in members(data):
     if isinstance(i, structures.Model):
       insertModel(models, i)
     elif isinstance(i, structures.Global):
       globals.append(i)
-  return {'models':models, 'globals':globals}
+    elif isinstance(i, structures.Animation):
+      animations.append(i)
+  return {'models':models, 'globals':globals, 'animations':animations}
 
 
 

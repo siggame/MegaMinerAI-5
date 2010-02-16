@@ -211,10 +211,8 @@ DLLEXPORT int networkLoop(int socket)
     sexp_t* expression, *sub, *subsub;
     expression = extract_sexpr(rec_string(socket));
     expression = expression->list;
-    if(expression->val != NULL && strcmp(expression->val, "game-over") == 0)
+    if(expression->val != NULL && strcmp(expression->val, "game-winner") == 0)
     {
-      expression = expression->next->next;
-      char* winnerName = expression->val;
       expression = expression->next;
       int winnerID = atoi(expression->val);
       if(winnerID == playerID)
@@ -276,23 +274,15 @@ DLLEXPORT int networkLoop(int socket)
           turnNumber = atoi(sub->val);
           sub = sub->next;
           
-          subsub = sub->list;
-          player0Light = atoi(subsub->val);
-          subsub = subsub->next;
-          player0Water = atoi(subsub->val);
-          subsub = subsub->next;
-          
+          player0Score = atoi(sub->val);
           sub = sub->next;
           
-          subsub = sub->list;
-          player1Light = atoi(subsub->val);
-          subsub = subsub->next;
-          player1Water = atoi(subsub->val);
-          subsub = subsub->next;
-          
+          player1Score = atoi(sub->val);
           sub = sub->next;
           
           maxX = atoi(sub->val);
+          sub = sub->next;
+          
           maxY = atoi(sub->val);
         }
         % for model in models:
