@@ -57,3 +57,4 @@ playerID = structures.Global('playerID', int, 'Player Number; either 0 or 1')
 maxX = structures.Global('maxX', int)
 maxY = structures.Global('maxY', int)
 
+gameNumber = structures.Global('gameNumber', int)

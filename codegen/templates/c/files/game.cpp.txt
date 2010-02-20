@@ -84,14 +84,13 @@ DLLEXPORT bool serverLogin(int s, const char* username, const char* password)
 DLLEXPORT int createGame()
 {
   sexp_t* expression;
-  int gameNum;
 
   send_string(socket, "(start-game)");
   expression = extract_sexpr(rec_string(socket));
   expression = expression->list->next;
-  gameNum = atoi(expression->val);
+  gameNumber = atoi(expression->val);
   
-  std::cout << "Creating game " << gameNum << endl;
+  std::cout << "Creating game " << gameNumber << endl;
   
   expression = expression->next->list->next->next;
 
@@ -99,15 +98,15 @@ DLLEXPORT int createGame()
   serverLogin(socket, last_username, last_password);
 
   stringstream expr;
-  expr << "(create-game " << gameNum << ")";
+  expr << "(create-game " << gameNumber << ")";
   send_string(socket, expr.str().c_str());
   
   expr.str("");
-  expr << "(join-game " << gameNum << ")";
+  expr << "(join-game " << gameNumber << ")";
   send_string(socket, expr.str().c_str());
   
   stringstream name;
-  name << gameNum;
+  name << gameNumber;
   gameName = name.str();
   playerID = 0;
   
@@ -120,8 +119,10 @@ DLLEXPORT int joinGame(int gameNum)
   sexp_t* expression;
   stringstream expr;
   
+  gameNumber = gameNum;
+  
   //get the server of the game
-  expr << "(join-game " << gameNum << ")";
+  expr << "(join-game " << gameNumber << ")";
   send_string(socket, expr.str().c_str());
   
   //redirect
@@ -136,7 +137,7 @@ DLLEXPORT int joinGame(int gameNum)
   send_string(socket, "(game-start)");
   
   stringstream name;
-  name << gameNum;
+  name << gameNumber;
   gameName = name.str();
   playerID = 1;
   
