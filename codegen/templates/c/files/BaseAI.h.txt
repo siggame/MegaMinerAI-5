@@ -12,7 +12,7 @@
 /// \brief A basic AI interface.
 
 ///This class implements most the code an AI would need to interface with the lower-level game code.
-///AIs should extend this class to get a lot of builer-plate code out of the way
+///AIs should extend this class to get a lot of boiler-plate code out of the way
 ///The provided AI class does just that.
 class BaseAI
 {

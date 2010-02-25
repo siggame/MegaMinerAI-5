@@ -4,7 +4,9 @@ deps = $(sources:%.cpp=%.d)
 CFLAGS += -g
 CXXFLAGS += -g
 
-CPPFLAGS = -DSHOW_NETWORK
+#Uncomment this line  to get a boatload of debug output.
+#CPPFLAGS = -DSHOW_NETWORK
+
 override CPPFLAGS += -Isexp
 
 all: client libclient.so

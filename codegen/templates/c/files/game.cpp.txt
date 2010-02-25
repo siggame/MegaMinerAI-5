@@ -129,6 +129,12 @@ DLLEXPORT int joinGame(int gameNum)
   expression = extract_sexpr(rec_string(socket));
   expression = expression->list->next->next;
   
+  if(!expression)
+  {
+    cerr << "Game " << gameNumber << " doesn't exist." << endl;
+    return 0;
+  }
+  
   socket = open_server_connection(expression->val, "19001");
   serverLogin(socket, last_username, last_password);
   
