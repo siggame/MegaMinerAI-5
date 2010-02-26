@@ -5,16 +5,22 @@ Plant = structures.Model('Plant', key='objectID',
     ['x', int],
     ['y', int],
     ['ownerID', int],
-    ['leaves', int],
-    ['roots', int],
-    ['flowers', int],
-    ['bark', int],
-    ['water', int],
-    ['light', int]],
+    ['root', int],
+    ['leaf', int],
+    ['flower', int],
+    ['health', int],
+    ['rootLevel', int],
+    ['leafLevel', int],
+    ['flowerLevel', int],
+    ['rootLevelUp', int],
+    ['leafLevelUp', int],
+    ['flowerLevelUp', int],
+    ['canAct', int]],
   functions = [ ['growLeaf', [] ],
     ['growRoot', [] ],
-    ['growFlower', [] ],
-    ['growBark', [] ],
+    ['growFlower', [ ['rootUp', int], ['leafUp', int], ['flowerUp', int] ] ],
+    ['spread', [ ['x', int], ['y', int] ] ],
+    ['spawn', [ ['x', int], ['y', int] ] ],
     ['talk', [ ['message', str] ] ]],
   doc = 'A pretty plant.'
   )
@@ -35,12 +41,16 @@ growRoot = structures.Animation('GrowRoot',
   data = [ ['plantID', int ] ]
   )
 
-growBark = structures.Animation('GrowBark',
+growFlower = structures.Animation('GrowFlower',
   data = [ ['plantID', int ] ]
   )
 
-growFlower = structures.Animation('GrowFlower',
-  data = [ ['plantID', int ] ]
+spread = structures.Animation('Spread',
+  data = [ ['parentID', int ], ['childID', int] ]
+  )
+
+spawn = structures.Animation('spawn',
+  data = [ ['parentID', int ], ['childID', int] ]
   )
 
 talk = structures.Animation('Talk',
@@ -52,9 +62,12 @@ turnNumber = structures.Global('turnNumber', int)
 player0Score = structures.Global('player0Score', int, 'Player 0\'s score')
 player1Score = structures.Global('player1Score', int, 'Player 1\'s score')
 
+player0Light = structures.Global('player0Light', int, 'Player 0\'s light')
+player1Light = structures.Global('player1Light', int, 'Player 1\'s light')
+
 playerID = structures.Global('playerID', int, 'Player Number; either 0 or 1')
 
-maxX = structures.Global('maxX', int)
-maxY = structures.Global('maxY', int)
+boardX = structures.Global('boardX', int)
+boardY = structures.Global('boardY', int)
 
 gameNumber = structures.Global('gameNumber', int)
