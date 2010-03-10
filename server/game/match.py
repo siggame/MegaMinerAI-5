@@ -62,10 +62,12 @@ class Match(DefaultGameWorld):
         return True
 
     def mapGeneration(self):
+        centerX = (Match.maxX+1)/2
+        centerY = (Match.maxY+1)/2
         startX = 2
         startY = 2
-        self.addObject(Plant(self, startX, startY, self.players[0]))
-        self.addObject(Plant(self, -startX, -startY, self.players[1]))
+        self.addObject(Plant(self, centerX + startX, centerY + startY, self.players[0]))
+        self.addObject(Plant(self, centerX - startX, centerY - startY, self.players[1]))
 
     def nextTurn(self):
         self.turnNum += 1
@@ -77,7 +79,7 @@ class Match(DefaultGameWorld):
         for obj in self.objects.values():
             obj.nextTurn()
 
-        self.dealBarkDamage()
+        #self.dealBarkDamage()
 
         self.sendStatus(itertools.chain(self.players, self.spectators))
 
@@ -85,22 +87,6 @@ class Match(DefaultGameWorld):
             obj.changed = False
         self.animations = ["animations"]
         self.checkWinner()
-
-    def dealBarkDamage(self):
-        barkDamage = 0
-        for obj in self.objects.values():
-            if obj.owner == self.turn:
-                barkDamage -= obj.bark
-            else:
-                barkDamage += obj.bark
-        barkDamage = max(0, barkDamage)
-        for obj in self.objects.values():
-            if obj.owner == self.turn:
-                obj.light -= barkDamage
-                obj.water -= barkDamage
-            if obj.light < 0 or obj.water < 0:
-                self.removeObject(obj)
-
 
     def checkWinner(self):
         if (self.turnNum >= self.turnLimit):
@@ -138,12 +124,8 @@ class Match(DefaultGameWorld):
         return self.objects[plantID].buildRoot()
 
     @requireReferences(Plant)
-    def buildBark(self, plantID):
-        return self.objects[plantID].buildBark()
-
-    @requireReferences(Plant)
-    def buildFlower(self, plantID):
-        return self.objects[plantID].buildFlower()
+    def buildFlower(self, plantID, rootUp, leafUp, flowerUp):
+        return self.objects[plantID].buildFlower(rootUp, leafUp, flowerUp)
 
     def sendIdent(self, players):
         if len(self.players) < 2:

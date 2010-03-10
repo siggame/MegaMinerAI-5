@@ -18,16 +18,18 @@ class RectangularArea(collections.defaultdict):
         if not(isinstance(key, (list, tuple))):
                 raise TypeError('%s is not a list or tuple.' % key.__class__)
         if len(key) != 2:
-            raise TypeError('A coordinate does not have a length of %u!' % len(key))
+            raise TypeError('A coordinate does not have a length of %u!' 
+                            % len(key))
         if not(all([isinstance(n, int) for n in key])):
             raise TypeError('Coordinates need to be integers!')
         x, y = key
         if not self.inBounds(x,y):
-            raise IndexError('(%u, %u) is not within (-+%u, -+%u)' % (x, y, self.max_x, self.max_y))
+            raise IndexError('(%u, %u) is not within (-+%u, -+%u)' 
+                             % (x, y, self.max_x, self.max_y))
         return collections.defaultdict.__missing__(self, key)
 
     def inBounds(self, x, y):
-        return (abs(x) <= self.max_x and abs(y) <= self.max_y)
+        return (x >=0 and x <= self.max_x and y >= 0 and y <= self.max_y)
 
 
 class GameWorld(object):
