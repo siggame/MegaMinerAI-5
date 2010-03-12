@@ -1,0 +1,56 @@
+// -*-c++-*-
+
+#include "structures.h"
+
+#include <iostream>
+
+% for model in models:
+
+std::ostream& operator<<(std::ostream& stream, ${model.name} ob)
+{
+  % for key in model.data.keys():
+  stream << "${key}: " << ob.${key}  <<'\n';
+  % endfor
+  return stream;
+}
+
+% endfor
+
+% for animation in animations:
+
+std::ostream& operator<<(std::ostream& stream, ${animation.name} ob)
+{
+  stream << "${animation.name}" << "\n";
+  % for key in animation.data.keys():
+  stream << "${key}: " << ob.${key}  <<'\n';
+  % endfor
+  return stream;
+}
+
+% endfor
+
+std::ostream& operator<<(std::ostream& stream, GameState ob)
+{
+  % for datum in globals:
+  stream << "${datum.name}: " << ob.${datum.name}  <<'\n';
+  % endfor
+  
+  % for model in models:
+  stream << "\n\n${model.name}s:\n";
+  for(std::vector<${model.name}>::iterator i = ob.${lowercase(model.name)}s.begin(); i != ob.${lowercase(model.name)}s.end(); i++)
+    stream << *i << '\n';
+  % endfor
+  stream << "\nAnimation\n";
+  for(std::vector<Animation*>::iterator i = ob.animations.begin(); i != ob.animations.end(); i++)
+  {
+  % for animation in animations:
+    if((**i).type == ${animation.name.upper()})
+      stream << *((${animation.name}*)*i) << "\n";
+  % endfor
+  }
+}
+
+Game::Game()
+{
+  winner = -1;
+}

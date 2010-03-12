@@ -1,0 +1,55 @@
+// -*-c++-*-
+
+#include "wrappers.h"
+#include "game.h"
+
+% for model in models:
+${model.name}::${model.name}(_${model.name}* ptr) : ptr(ptr)
+{
+
+}
+
+%   for key in model.data.keys():
+${conversions[model.data[key]]} ${model.name}::${key}()
+{
+  return ptr->${key};
+}
+
+%   endfor
+
+%   for func in model.functions.keys():
+bool ${model.name}::${func}(\
+%     for arg in model.functions[func]:
+%       if model.functions[func][0] != arg:
+, \
+%       endif
+%       if isinstance(arg[1], Model):
+${arg[1].name}& ${arg[0]}\
+%       else:
+${conversions[arg[1]]} ${arg[0]}\
+%       endif
+%     endfor
+)
+{
+  return ${model.name.lower()}${capitalize(func)}(ptr\
+%     for arg in model.functions[func]:
+%       if isinstance(arg[1], Model):
+, ${arg[0]}.ptr\
+%       else:
+, ${arg[0]}\
+%       endif
+%     endfor
+);
+}
+
+%   endfor
+
+std::ostream& operator<<(std::ostream& stream,${model.name} ob)
+{
+%   for key in model.data.keys():
+  stream << "${key}: " << ob.ptr->${key}  <<'\n';
+%   endfor
+  return stream;
+}
+
+% endfor

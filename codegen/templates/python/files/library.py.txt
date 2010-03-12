@@ -1,0 +1,72 @@
+# -*-python-*-
+
+import os
+
+from ctypes import *
+
+try:
+  if os.name == 'posix':
+    library = CDLL("../c/libclient.so")
+  elif os.name == 'nt':
+    library = CDLL("../c/client.dll")
+  else:
+    raise Exception("Unrecognized OS: "+os.name)
+except OSError:
+  raise Exception("It looks like you didn't build libclient. Run 'make' and try again.")
+
+# commands
+
+library.serverLogin.restype = c_bool
+library.serverLogin.argtypes = [c_int, c_char_p, c_char_p]
+
+library.createGame.restype = c_int
+library.createGame.argtypes = []
+
+library.joinGame.restype = c_int
+library.joinGame.argtypes = [c_int]
+
+library.endTurn.restype = None
+library.endTurn.argtypes = []
+
+library.getStatus.restype = None
+library.getStatus.argtypes = []
+
+library.networkLoop.restype = c_int
+library.networkLoop.argtypes = [c_int]
+
+%for model in models:
+%  for func in model.functions.keys():
+library.${model.name.lower()}${capitalize(func)}.restype = c_bool
+library.${model.name.lower()}${capitalize(func)}.argtypes = [${conversions[model]}\
+%    for arg in model.functions[func]:
+, \
+${conversions[arg[1]]}\
+%  endfor
+]
+
+% endfor
+%endfor
+# accessors
+
+%for datum in globals:
+library.get${capitalize(datum.name)}.restype = ${conversions[datum.type]}
+library.get${capitalize(datum.name)}.argtypes = []
+
+%endfor
+%for model in models:
+library.get${model.name}.restype = c_void_p
+library.get${model.name}.argtypes = [c_int]
+
+library.get${model.name}Count.restype = c_int
+library.get${model.name}Count.argtypes = []
+
+%endfor
+# getters
+
+%for model in models:
+%  for key in model.data.keys():
+library.${lowercase(model.name)}Get${capitalize(key)}.restype = ${conversions[model.data[key]]}
+library.${lowercase(model.name)}Get${capitalize(key)}.argtypes = [c_void_p]
+
+%  endfor
+%endfor

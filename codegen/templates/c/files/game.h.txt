@@ -1,0 +1,59 @@
+//Copyright (C) 2009 - Missouri S&T ACM AI Team
+//Please do not modify this file while building your AI
+//See AI.h & AI.cpp for that
+#ifndef GAME_H
+#define GAME_H
+
+#include "network.h"
+#include "structures.h"
+
+#ifdef WIN32
+#define DLLEXPORT extern "C" __declspec(dllexport)
+#else
+#define DLLEXPORT
+#endif
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+  DLLEXPORT bool serverLogin(int socket, const char* username, const char* password);
+  DLLEXPORT int createGame();
+  DLLEXPORT int joinGame(int id);
+
+  DLLEXPORT void endTurn();
+  DLLEXPORT void getStatus();
+
+
+//commands
+
+% for model in models:
+% for func in model.functions.keys():
+  DLLEXPORT bool ${model.name.lower()}${capitalize(func)}(${conversions[model]} object\
+% for arg in model.functions[func]:
+, \
+${conversions[arg[1]]} ${arg[0]}\
+% endfor
+);
+% endfor
+% endfor
+
+//accessors
+
+% for datum in globals:
+DLLEXPORT ${conversions[datum.type]} get${capitalize(datum.name)}();
+% endfor
+
+% for model in models:
+DLLEXPORT _${model.name}* get${model.name}(int num);
+DLLEXPORT int get${model.name}Count();
+
+% endfor
+
+
+  DLLEXPORT int networkLoop(int socket);
+#ifdef __cplusplus
+}
+#endif
+
+#endif

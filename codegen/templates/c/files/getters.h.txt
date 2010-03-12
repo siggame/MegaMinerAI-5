@@ -1,0 +1,19 @@
+#ifndef GETTERS_H 
+#define GETTERS_H
+#include "structures.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+% for model in models:
+%   for key in model.data.keys():
+${conversions[model.data[key]]} ${lowercase(model.name)}Get${capitalize(key)}(_${model.name}* ptr);
+%   endfor
+% endfor
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

@@ -1,0 +1,77 @@
+import com.sun.jna.Pointer;
+
+% if model.doc:
+///${model.doc}
+% endif
+class ${model.name}
+{
+    Pointer ptr;
+    int ID;
+    int iteration;
+    public ${model.name}(Pointer p)
+    {
+            ptr = p;
+            ID = Client.INSTANCE.${lowercase(model.name)}Get${capitalize(model.key)}(ptr);
+            iteration = BaseAI.iteration;
+    }
+
+    boolean validify()
+    {
+        if(iteration == BaseAI.iteration) return true;
+        for(int i = 0; i < BaseAI.${lowercase(model.name)}s.length; i++)
+        {
+          if(BaseAI.${lowercase(model.name)}s[i].ID == ID)
+            {
+                ptr = BaseAI.${lowercase(model.name)}s[i].ptr;
+                iteration = BaseAI.iteration;
+                return true;
+            }
+        }
+      throw new ExistentialError();
+    }
+    
+    //commands
+    
+% for func in model.functions.keys():
+    boolean ${func}(\
+%   for arg in model.functions[func]:
+%     if model.functions[func][0] != arg:
+, \
+%     endif
+%     if isinstance(arg[1], Model):
+${arg[1].name} ${arg[0]}\
+%     else:
+${conversions[arg[1]]} ${arg[0]}\
+%     endif
+%   endfor
+)
+    {
+        validify();
+%   for arg in model.functions[func]:
+%     if isinstance(arg[1], Model):
+        ${arg[0]}.validify();
+%     endif
+%   endfor
+        return Client.INSTANCE.${lowercase(model.name)}${capitalize(func)}(ptr\
+%   for arg in model.functions[func]:
+, \
+%     if isinstance(arg[1], Model):
+${arg[0]}.ptr\
+%     else:
+${arg[0]}\
+%     endif
+%   endfor
+);
+    }
+% endfor
+    
+    //getters
+    
+% for key in model.data.keys():
+    public ${conversions[model.data[key]]} get${capitalize(key)}()
+    {
+        validify();
+        return Client.INSTANCE.${lowercase(model.name)}Get${capitalize(key)}(ptr);
+    }
+% endfor
+}
