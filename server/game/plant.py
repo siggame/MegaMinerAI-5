@@ -56,11 +56,11 @@ class Plant(MappableObject):
         if(self.leaf):
             return str(self.id) + "cannot grow a leaf. It already has a leaf."
         else:
-            if( self.owner.light >= Plant.leafCost ):  
+            if self.owner.light >= Plant.leafCost:
                     self.leaf = True
                     self.owner.light -= Plant.leafCost
-                else:
-                    return str(self.id) + "cannot grow leaf, not enough resources"
+            else:
+                return str(self.id) + "cannot grow leaf, not enough resources"
         return True
                 
     @checkOwnership("grow a root")
