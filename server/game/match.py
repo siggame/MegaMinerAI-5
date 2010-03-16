@@ -127,6 +127,14 @@ class Match(DefaultGameWorld):
     @requireReferences(Plant)
     def buildFlower(self, plantID, rootUp, leafUp, flowerUp):
         return self.objects[plantID].buildFlower(rootUp, leafUp, flowerUp)
+    
+    @requireReferences(Plant)
+    def spread(self, plantID, x, y):
+        return self.objects[plantID].spread(x, y)
+    
+    @requireReferences(Plant)
+    def spawn(self, plantID, x, y):
+        return self.objects[plantID].spawn(x, y)
 
     def sendIdent(self, players):
         if len(self.players) < 2:
