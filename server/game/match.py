@@ -54,6 +54,7 @@ class Match(DefaultGameWorld):
             return "Game has already begun"
         for i in self.players:
             i.score = 0
+            i.light = 0
         self.mapGeneration()
         self.turnNum = -1
         self.sendIdent(itertools.chain(self.players, self.spectators))
@@ -160,8 +161,9 @@ class Match(DefaultGameWorld):
     def status(self):
         msg = ["status"]
 
-        msg.append(["game", self.turnNum, self.players[0].score, 
-                    self.players[1].score, Match.maxX, Match.maxY])
+        msg.append(["game", self.turnNum, self.players[0].score,
+                    self.players[1].score, self.players[0].light,
+                    self.players[1].light, Match.maxX, Match.maxY])
         typeLists = defaultdict(list)
         for obj in self.objects.values():
             typeLists[obj.__class__].append(obj)

@@ -29,18 +29,18 @@ class Plant(MappableObject):
 
     def __init__(self, game, x, y, owner):
         MappableObject.__init__(self, game, x, y)
-        self.root = False
-        self.leaf = False
-        self.flower = False
+        self.root = 0
+        self.leaf = 0
+        self.flower = 0
         self.health = Plant.initialHealth
         self.owner = owner
         self.techLevelRoot = 1
         self.techLevelLeaf = 1
         self.techLevelFlower = 1
-        self.flowerRootUp
-        self.flowerLeafUp
-        self.flowerFlowerUp
-        self.canAct = True
+        self.flowerRootUp = 0
+        self.flowerLeafUp = 0
+        self.flowerFlowerUp = 0
+        self.canAct = 1
 
     def toList(self):
         list = MappableObject.toList(self)
@@ -57,7 +57,7 @@ class Plant(MappableObject):
             return str(self.id) + "cannot grow a leaf. It already has a leaf."
         else:
             if self.owner.light >= Plant.leafCost:
-                    self.leaf = True
+                    self.leaf = 1
                     self.owner.light -= Plant.leafCost
             else:
                 return str(self.id) + "cannot grow leaf, not enough resources"
@@ -69,7 +69,7 @@ class Plant(MappableObject):
             return str(self.id) + " cannot grow roots. It already has roots."
         else:
             if( self.owner.light >= Plant.rootCost ): 
-                self.root = True
+                self.root = 1
                 self.owner.light -= Plant.rootCost
             else:
                 return str(self.id) + " cannot grow root, not enough resources"
@@ -86,7 +86,7 @@ class Plant(MappableObject):
                 " a flower with these features."
         else:
             if( self.owner.light >= flowerCost ):
-                self.flower = True
+                self.flower = 1
                 self.owner.light -= flowerCost
             else:
                 return str(self.id) + "cannot grow flower, not enough resources"
@@ -102,7 +102,7 @@ class Plant(MappableObject):
         if(((x == self.x+1) or (x == self.x-1)) and ((y == self.y+1) or (y == self.y-1))):
             if(self.owner.light >= Plant.rootCost):
                 newPlant = Plant(self.game, x, y, self.owner)
-                newPlant.root = True
+                newPlant.root = 1
                 newPlant.techLevelRoot = self.techLevelRoot
                 newPlant.techLevelLeaf = self.techLevelLeaf
                 newPlant.techLevelFlower = self.techLevelFlower
@@ -136,10 +136,10 @@ class Plant(MappableObject):
 
     def nextTurn(self):
         MappableObject.nextTurn(self)
-        if (self.owner == self.game.turn and canAct):
-            self.owner.light += techLevelLeaf
+        if (self.owner == self.game.turn and self.canAct):
+            self.owner.light += self.techLevelLeaf
             #self.light += techLevelLeaf
-            self.owner.score += techLevelLeaf
+            self.owner.score += self.techLevelLeaf
 
             self.health -= 1
 
