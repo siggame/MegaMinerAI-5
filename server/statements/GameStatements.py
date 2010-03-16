@@ -89,7 +89,7 @@ def gameStatus(self, expression):
 @wrapper('game-grow-leaf')
 @require_length(2)
 @require_game
-def gameMove(self, expression):
+def gameGrowLeaf(self, expression):
     if games[self.game].turn != self:
         self.writeSExpr(['game-grow-leaf-denied', 'not your turn'])
         return False
@@ -108,7 +108,7 @@ def gameMove(self, expression):
 @wrapper('game-grow-root')
 @require_length(2)
 @require_game
-def gameMove(self, expression):
+def gameGrowRoot(self, expression):
     if games[self.game].turn != self:
         self.writeSExpr(['game-grow-root-denied', 'not your turn'])
         return False
@@ -126,40 +126,66 @@ def gameMove(self, expression):
 
 
 @wrapper('game-grow-flower')
-@require_length(2)
+@require_length(5)
 @require_game
-def gameMove(self, expression):
+def gameGrowFlower(self, expression):
     if games[self.game].turn != self:
         self.writeSExpr(['game-grow-flower-denied', 'not your turn'])
         return False
     try:
         id = int(expression[1])
+        rootUp = int(expression[2])
+        leafUp = int(expression[3])
+        flowerUp = int(expression[4])
     except:
         self.writeSExpr(['game-grow-flower-denied', 'arguments not integers'])
         return False
 
-    errBuff = games[self.game].buildFlower(id)
+    errBuff = games[self.game].buildFlower(id, rootUp, leafUp, flowerUp)
     if errBuff != True:
         self.writeSExpr(['game-grow-flower-denied', errBuff])
         return False
     return True
 
-@wrapper('game-grow-bark')
-@require_length(2)
+@wrapper('game-spread')
+@require_length(4)
 @require_game
-def gameMove(self, expression):
+def gameSpread(self, expression):
     if games[self.game].turn != self:
-        self.writeSExpr(['game-grow-bark-denied', 'not your turn'])
+        self.writeSExpr(['game-spread-denied', 'not your turn'])
         return False
     try:
         id = int(expression[1])
+        x = int(expression[2])
+        y = int(expression[3])
     except:
-        self.writeSExpr(['game-grow-bark-denied', 'arguments not integers'])
+        self.writeSExpr(['game-spread-denied', 'arguments not integers'])
         return False
 
-    errBuff = games[self.game].buildBark(id)
+    errBuff = games[self.game].spread(id, x, y)
     if errBuff != True:
-        self.writeSExpr(['game-grow-bark-denied', errBuff])
+        self.writeSExpr(['game-spread-denied', errBuff])
+        return False
+    return True
+
+@wrapper('game-spawn')
+@require_length(4)
+@require_game
+def gameSpawn(self, expression):
+    if games[self.game].turn != self:
+        self.writeSExpr(['game-spawn-denied', 'not your turn'])
+        return False
+    try:
+        id = int(expression[1])
+        x = int(expression[2])
+        y = int(expression[3])
+    except:
+        self.writeSExpr(['game-spawn-denied', 'arguments not integers'])
+        return False
+
+    errBuff = games[self.game].spawn(id, x, y)
+    if errBuff != True:
+        self.writeSExpr(['game-spawn-denied', errBuff])
         return False
     return True
 
