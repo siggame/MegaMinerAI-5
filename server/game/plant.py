@@ -81,7 +81,7 @@ class Plant(MappableObject):
             return str(self.id) + "cannot grow a flower. It already has a leaf."
         if rootUp < 0 or leafUp < 0 or flowerUp < 0:
             return str(self.id) + " cannot have negative 'up' values."
-        if rootUp + leafUp + flowerUp > self.flowerLevel:
+        if rootUp + leafUp + flowerUp > self.techLevelFlower:
             return str(self.id) + " does not have enough resources to grow" + \
                 " a flower with these features."
         else:
@@ -99,7 +99,7 @@ class Plant(MappableObject):
     def spread(self, x, y):
         if(not self.root):
             return str(self.id) + " does not have a root, cannot spread"
-        if(((x == self.x+1) or (x == self.x-1)) and ((y == self.y+1) or (y == self.y-1))):
+        if abs(x - self.x) + abs(y - self.y) == 1:
             if(self.owner.light >= Plant.rootCost):
                 newPlant = Plant(self.game, x, y, self.owner)
                 newPlant.root = 1
@@ -116,8 +116,7 @@ class Plant(MappableObject):
     def spawn(self, x, y):
         if(not self.flower):
             return str(self.id) + " does not have a flower, cannot spawn"
-        if(((x == self.x+1) or (x == self.x-1)) 
-           and ((y == self.y+1) or (y == self.y-1))):
+        if abs(x - self.x) + abs(y - self.y) == 1:
             if(self.owner.light >= Plant.rootCost):
                 newPlant = Plant(self.game, x, y, self.owner)
                 newPlant.techLevelRoot = self.techLevelRoot + self.flowerRootUp
