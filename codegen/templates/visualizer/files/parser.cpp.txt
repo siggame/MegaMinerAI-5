@@ -76,10 +76,16 @@ static bool parseSexp(Game& game, sexp_t* expression)
           gs.player1Score = atoi(sub->val);
           sub = sub->next;
           
-          gs.maxX = atoi(sub->val);
+          gs.player0Light = atoi(sub->val);
+          sub = sub->next;
+
+          gs.player1Light = atoi(sub->val);
           sub = sub->next;
           
-          gs.maxY = atoi(sub->val);
+          gs.boardX = atoi(sub->val);
+          sub = sub->next;
+          
+          gs.boardY = atoi(sub->val);
       }
       % for model in models:
       else if(string(sub->val) == "${model.name}")
