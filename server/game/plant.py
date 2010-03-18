@@ -85,9 +85,9 @@ class Plant(MappableObject):
             return str(self.id) + " does not have enough resources to grow" + \
                 " a flower with these features."
         else:
-            if( self.owner.light >= flowerCost ):
+            if( self.owner.light >= Plant.flowerCost ):
                 self.flower = 1
-                self.owner.light -= flowerCost
+                self.owner.light -= Plant.flowerCost
             else:
                 return str(self.id) + "cannot grow flower, not enough resources"
         self.flowerRootUp = rootUp
