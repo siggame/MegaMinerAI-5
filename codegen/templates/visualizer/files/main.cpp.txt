@@ -10,7 +10,10 @@ using namespace std;
 int main(int argc, char** argv)
 {
   Game g;
-  parseFile(g, "test.gamelog");
+  if(argc > 1)
+    parseFile(g, argv[1];
+  else
+    parseFile("test.gamelog");
   
   for(vector<GameState>::iterator i = g.states.begin(); i != g.states.end(); i++)
   {

@@ -23,7 +23,7 @@ import random
 import math
 from game.match import Match
 from StatementUtils import dict_wrapper, require_length, require_game
-import statements.Statements as Statements
+import Statements as Statements
 
 games = Statements.games
 
