@@ -41,7 +41,7 @@ class GameWorld(object):
         self.maxid = 2147483600
         self.turnNum = 0
         self.players = []
-	self.spectators = []
+        self.spectators = []
         self.turn = None #the player whose turn it is;
                          #None before and after the game.
         self.winner = None #the player who won the game;
@@ -64,7 +64,7 @@ class GameWorld(object):
 
 class RectangularGameWorld(GameWorld):
     def __init__(self, x, y):
-	GameWorld.__init__(self)
-	self.area = RectangularArea(x, y)
+        GameWorld.__init__(self)
+        self.area = RectangularArea(x, y)
 
 DefaultGameWorld = RectangularGameWorld

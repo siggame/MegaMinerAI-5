@@ -54,31 +54,31 @@ class Plant(MappableObject):
     @checkOwnership("grow a leaf")
     def buildLeaf(self):
         if(self.leaf):
-            return str(self.id) + "cannot grow a leaf. It already has a leaf."
+            return str(self.id) + "cannot grow a leaf; it already has a leaf."
         else:
             if self.owner.light >= Plant.leafCost:
                     self.leaf = 1
                     self.owner.light -= Plant.leafCost
             else:
-                return str(self.id) + "cannot grow leaf, not enough resources: have %s, need %s" % (self.owner.light, Plant.leafCost)
+                return str(self.id) + "cannot grow leaf; not enough resources: have %s, need %s" % (self.owner.light, Plant.leafCost)
         return True
-                
+
     @checkOwnership("grow a root")
     def buildRoot(self):
         if(self.root):
-            return str(self.id) + " cannot grow roots. It already has roots."
+            return str(self.id) + " cannot grow roots; it already has roots."
         else:
             if( self.owner.light >= Plant.rootCost ): 
                 self.root = 1
                 self.owner.light -= Plant.rootCost
             else:
-                return str(self.id) + " cannot grow root, not enough resources: have %s, need %s" % (self.owner.light, Plant.rootCost)
+                return str(self.id) + " cannot grow root; not enough resources: have %s, need %s" % (self.owner.light, Plant.rootCost)
         return True
 
     @checkOwnership("grow a flower")
     def buildFlower(self, rootUp, leafUp, flowerUp):
         if(self.flower):
-            return str(self.id) + "cannot grow a flower. It already has a leaf."
+            return str(self.id) + "cannot grow a flower; It already has a flower."
         if rootUp < 0 or leafUp < 0 or flowerUp < 0:
             return str(self.id) + " cannot have negative 'up' values."
         if rootUp + leafUp + flowerUp > self.techLevelFlower:
@@ -89,7 +89,7 @@ class Plant(MappableObject):
                 self.flower = 1
                 self.owner.light -= Plant.flowerCost
             else:
-                return str(self.id) + "cannot grow flower, not enough resources: have %s, need %s" % (self.owner.light, Plant.flowerCost)
+                return str(self.id) + "cannot grow flower; not enough resources: have %s, need %s" % (self.owner.light, Plant.flowerCost)
         self.flowerRootUp = rootUp
         self.flowerLeafUp = leafUp
         self.flowerFlowerUp = flowerUp
@@ -100,6 +100,8 @@ class Plant(MappableObject):
         if(not self.root):
             return str(self.id) + " does not have a root, cannot spread"
         if abs(x - self.x) + abs(y - self.y) == 1:
+            if self.owner.area[(x, y)]:
+                return "Cannot spread; destination populated."
             if(self.owner.light >= Plant.rootCost):
                 newPlant = Plant(self.game, x, y, self.owner)
                 newPlant.root = 1
@@ -108,7 +110,7 @@ class Plant(MappableObject):
                 newPlant.techLevelFlower = self.techLevelFlower
                 self.game.addObject(newPlant)
             else:
-                return "Cannot spread, not enough resources: have %s, need %s" % (self.owner.light, Plant.rootCost)
+                return "Cannot spread; not enough resources: have %s, need %s" % (self.owner.light, Plant.rootCost)
         else:
             return "Coordinate not within range of plant"
 
@@ -117,6 +119,8 @@ class Plant(MappableObject):
         if(not self.flower):
             return str(self.id) + " does not have a flower, cannot spawn"
         if abs(x - self.x) + abs(y - self.y) == 1:
+            if self.owner.area[(x, y)]:
+                return "Cannot spawn; destination populated."
             if(self.owner.light >= Plant.rootCost):
                 newPlant = Plant(self.game, x, y, self.owner)
                 newPlant.techLevelRoot = self.techLevelRoot + self.flowerRootUp
@@ -124,9 +128,9 @@ class Plant(MappableObject):
                 newPlant.techLevelFlower = self.techLevelFlower + self.flowerFlowerUp
                 self.game.addObject(newPlant)
             else:
-                return "Cannot spawn, not enough resources: have %s, need %s" % (self.owner.light, Plant.rootCost)
+                return "Cannot spawn; not enough resources: have %s, need %s" % (self.owner.light, Plant.rootCost)
         else:
-            return "Cannot spawn here, it's not within range"
+            return "Cannot spawn here; it's not within range"
         return True
 
     @checkOwnership("talk")
