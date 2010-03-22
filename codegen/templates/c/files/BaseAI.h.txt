@@ -7,7 +7,10 @@
 #include <vector>
 #include <ctime>
 #include "game.h"
-#include "wrappers.h"
+
+% for model in models:
+#include "${model.name}.h"
+% endfor
 
 /// \brief A basic AI interface.
 
@@ -35,9 +38,11 @@ public:
   ///Make this your password, which should be provided.
   virtual const char* password() = 0;
   ///
-  ///This is run on turn 1 before run
+  ///This function is run once, before your first turn.
   virtual void init() = 0;
-  
+  ///
+  ///This function is called each time it is your turn
+  ///Return true to end your turn, return false to ask the server for updated information
   virtual bool run() = 0;
 
   bool startTurn();
