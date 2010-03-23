@@ -1,4 +1,5 @@
 #include "scoreboard.h"
+#include "legend.h"
 
 Scoreboard::Scoreboard( int x, int y, int width, int height ) : Window( x, y, width, height )
 {
@@ -11,26 +12,51 @@ Scoreboard::Scoreboard( int x, int y, int width, int height ) : Window( x, y, wi
 void Scoreboard::update()
 {
   wattrset( mWindow, COLOR_PAIR( 9 ) );
-  mvwprintw( mWindow, 1, 2, "Turn: %d      ", turn );
   
-  wattrset( mWindow, COLOR_PAIR( 8 ) );
-  mvwprintw( mWindow, 2, 2, "----------------" );
+  int line = 1;
+  
+  mvwprintw( mWindow, line++, 2, "Turn: %d      ", turn );
+  
+  wattrset( mWindow, COLOR_PAIR( PLAYER_1_COLOR ) );
+  mvwprintw( mWindow, line++, 2, "---------------------------" );
   wattron( mWindow, A_BOLD );
-  mvwprintw( mWindow, 3, 3, "Player 1" );
+  mvwprintw( mWindow, line++, 3, "Player 1" );
   wattroff( mWindow, A_BOLD );
-  mvwprintw( mWindow, 4, 2, "----------------" );
-  mvwprintw( mWindow, 5, 3, "Score: %d       ", p1score );
+  mvwprintw( mWindow, line++, 2, "---------------------------" );
+  mvwprintw( mWindow, line++, 3, "Score: %d       ", p1score );
 //  mvwprintw( mWindow, 5, 3, "Light: %d      ", p1light );
 //  mvwprintw( mWindow, 6, 3, "Water: %d      ", p1water );
   
-  mvwprintw( mWindow, 8, 2, "----------------" );
+  wattrset( mWindow, COLOR_PAIR( PLAYER_2_COLOR ) );
+  
+  line = 8;
+  
+  mvwprintw( mWindow, line++, 2, "---------------------------" );
   wattron( mWindow, A_BOLD );
-  mvwprintw( mWindow, 9, 3, "Player 2" );
+  mvwprintw( mWindow, line++, 3, "Player 2" );
   wattroff( mWindow, A_BOLD );
-  mvwprintw( mWindow, 10, 2, "----------------" );
-  mvwprintw( mWindow, 11, 3, "Score: %d       ", p2score );
-//  mvwprintw( mWindow, 11, 3, "Light: %d     ", p2light );
-//  mvwprintw( mWindow, 12, 3, "Water: %d     ", p2water );
+  mvwprintw( mWindow, line++, 2, "---------------------------" );
+  mvwprintw( mWindow, line++, 3, "Score: %d       ", p2score );
+  
+  wattrset( mWindow, COLOR_PAIR( INSTRUCTIONS ) );
+  
+  line = 26;
+  
+  mvwprintw( mWindow, line++, 3, "Visualizer Usage:" );
+  mvwprintw( mWindow, line++, 3, "Q     | Quit" );
+  mvwprintw( mWindow, line++, 3, "P     | Pause/Play" );
+  mvwprintw( mWindow, line++, 3, "R     | Rewind" );
+  mvwprintw( mWindow, line++, 3, "+     | Increase Speed" );
+  mvwprintw( mWindow, line++, 3, "-     | Decrease Speed" );
+  mvwprintw( mWindow, line++, 3, ">     | Go ahead one frame" );
+  mvwprintw( mWindow, line++, 3, "<     | Go back one frame" );
+  mvwprintw( mWindow, line++, 3, "Left  | Move Cursor Left" );
+  mvwprintw( mWindow, line++, 3, "Right | Move Cursor Right" );
+  mvwprintw( mWindow, line++, 3, "Up    | Move Cursor Up" );
+  mvwprintw( mWindow, line++, 3, "Down  | Move Cursor Down" );
+  
+  
+
   
   wattroff( mWindow, COLOR_PAIR( 8 ) );
   

@@ -23,10 +23,17 @@ Gameboard::Gameboard( int x, int y, int width, int height )
 
 void Gameboard::setupPieces()
 {
-  init_color( COLOR_RED, 0x5C, 0x40, 0x33 );
+  //init_color( COLOR_RED, 0x5C, 0x40, 0x33 );
   
   init_pair(18, COLOR_BLACK, COLOR_CYAN );
-    
+  
+  init_pair( PLAYER_1_COLOR, COLOR_RED, COLOR_BLACK );
+  init_pair( PLAYER_2_COLOR, COLOR_BLUE, COLOR_BLACK );
+  init_pair( PLAYER_1_PIECE_COLOR, COLOR_WHITE, COLOR_RED );
+  init_pair( PLAYER_2_PIECE_COLOR, COLOR_WHITE, COLOR_BLUE );
+  init_pair( INSTRUCTIONS, COLOR_WHITE, COLOR_BLACK );
+  init_pair( BACKGROUND_COLOR, COLOR_GREEN, COLOR_BLACK );
+  
   // Roots
   init_pair(10, COLOR_RED, COLOR_BLACK );
   init_pair(14, COLOR_RED, COLOR_BLACK );
@@ -40,13 +47,20 @@ void Gameboard::setupPieces()
   init_pair(13, COLOR_RED, COLOR_BLACK );
   init_pair(17, COLOR_RED, COLOR_BLACK );
   
-  // Background
   init_pair( 9, COLOR_WHITE, COLOR_BLACK );
+  
+  init_pair( 8, COLOR_CYAN, COLOR_BLACK );
+  
+  
+  #if 0
+  
+  // Background
+  
   
   // Header
 
   // Player 1
-  init_pair( 8, COLOR_CYAN, COLOR_BLACK );
+  
   
   pieces[0][P_ROOT].keyCode0 = 'r';
   pieces[0][P_ROOT].color = 10;
@@ -66,8 +80,10 @@ void Gameboard::setupPieces()
   pieces[1][P_BARK].keyCode0 = 'B';
   pieces[1][P_BARK].color = 17;
   
+  #endif
   background.keyCode0 = ACS_CKBOARD;//ACS_LANTERN;
   background.color = 9;
+  
 }
 
 void Gameboard::newState( GameState state )
@@ -80,6 +96,8 @@ void Gameboard::newState( GameState state )
     {
       if( curX == i && curY == j )
         wattron( mWindow, COLOR_PAIR( 18 ) );
+      else
+        wattron( mWindow, COLOR_PAIR( BACKGROUND_COLOR ) );
 
       mvwaddch( mWindow, 1+j*2, 1+i*2, background.keyCode0 );
       mvwaddch( mWindow, 1+j*2, 2+i*2, background.keyCode0 );
@@ -88,6 +106,8 @@ void Gameboard::newState( GameState state )
 
       if( curX == i && curY == j )
         wattroff( mWindow, COLOR_PAIR( 18 ) );
+      else
+        wattroff( mWindow, COLOR_PAIR( BACKGROUND_COLOR ) );
     }
 
   // Draw them plants.
@@ -95,11 +115,11 @@ void Gameboard::newState( GameState state )
   {
       //char *piece = &board[i->x][i->y];
 	    
-      Piece *currentPiece = &pieces[i->ownerID][i->objectID];
+      //Piece *currentPiece = &pieces[i->ownerID][i->objectID];
       if( i->x == curX && i->y == curY )
         wattron( mWindow, COLOR_PAIR( 18 ) );
       else
-        wattron( mWindow, COLOR_PAIR( currentPiece->color ) );
+        wattron( mWindow, COLOR_PAIR( PLAYER_1_PIECE_COLOR+i->ownerID ) );
 
       int ch = 0;      
 
@@ -141,7 +161,7 @@ void Gameboard::newState( GameState state )
       if( i->x == curX && i->y == curY )
         wattroff( mWindow, COLOR_PAIR( 18 ) );
       else
-        wattroff( mWindow, COLOR_PAIR( currentPiece->color ) );
+        wattroff( mWindow, COLOR_PAIR( 10 ) );
       
   }
   
