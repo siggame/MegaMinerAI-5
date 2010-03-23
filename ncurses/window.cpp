@@ -14,6 +14,7 @@ Window::Window( int x, int y, int width, int height )
 Window::~Window()
 {
   deleteWindow();
+  
 }
 
 void Window::createWindow()
@@ -27,6 +28,7 @@ void Window::createWindow()
 void Window::deleteWindow()
 {
   werase( mWindow );
+  wattrset( mWindow, 0 );
   wrefresh( mWindow );
   delwin( mWindow );
 }

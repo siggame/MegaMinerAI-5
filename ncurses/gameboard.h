@@ -10,7 +10,7 @@
 class Gameboard : public Window
 {
   private:
-    Piece pieces[2][4];
+    //Piece pieces[2][4];
     Piece background;
     void setupPieces();
     

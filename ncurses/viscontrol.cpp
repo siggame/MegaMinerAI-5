@@ -15,11 +15,9 @@ Viscontrol::Viscontrol( int x, int y, Game *g )
   moveWindow( x, maxY*2+4 ); 
 
   gameboard = new Gameboard( x, y, maxX*2+4, maxY*2+4 );
-  score = new Scoreboard( x+maxX*2+5, y, 23, maxY*2+4 );
-  plantInfo = new Plantinfo( x+maxX*2+5+23, y, 23, maxY*2+4 );
+  score = new Scoreboard( x+maxX*2+5, y, 31, maxY*2+4 );
+  plantInfo = new Plantinfo( x+maxX*2+5+31, y, 23, maxY*2+4 );
   game = g;
-
-//  moveWindow( x, maxY*4+4); 
  
   curX = curY = 0;
   
@@ -56,10 +54,11 @@ int Viscontrol::run()
     c = getch();
     
     switch( c )
-    {
+    {     
     case 'q':
       return 0;
       break;
+    case ' ':
     case 'p':
       if( currentMode == MODE_PAUSE )
 	updateMode( MODE_PLAY );
