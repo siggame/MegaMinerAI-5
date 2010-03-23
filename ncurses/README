@@ -1,0 +1,21 @@
+VISUALIZER
+------------------------------
+
+To run visualizer:
+./visualizer megazord.gamelog
+
+
+  Key  |  Function
+       |
+   P   | Pause/Play
+   R   | Rewind
+   +   | Increase Speed
+   -   | Decrease Speed
+   >   | Go ahead one frame
+   <   | Go back one frame
+ Left  | Move Cursor Left
+ Right | Move Cursor Right
+  Up   | Move Cursor Up
+ Down  | Move Cursor Down
+
+

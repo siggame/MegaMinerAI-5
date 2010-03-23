@@ -100,7 +100,7 @@ class Plant(MappableObject):
         if(not self.root):
             return str(self.id) + " does not have a root, cannot spread"
         if abs(x - self.x) + abs(y - self.y) == 1:
-            if self.owner.area[(x, y)]:
+            if self.game.area[(x, y)]:
                 return "Cannot spread; destination populated."
             if(self.owner.light >= Plant.rootCost):
                 newPlant = Plant(self.game, x, y, self.owner)
@@ -119,7 +119,7 @@ class Plant(MappableObject):
         if(not self.flower):
             return str(self.id) + " does not have a flower, cannot spawn"
         if abs(x - self.x) + abs(y - self.y) == 1:
-            if self.owner.area[(x, y)]:
+            if self.game.area[(x, y)]:
                 return "Cannot spawn; destination populated."
             if(self.owner.light >= Plant.rootCost):
                 newPlant = Plant(self.game, x, y, self.owner)
