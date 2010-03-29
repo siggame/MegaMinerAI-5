@@ -65,10 +65,10 @@ class Match(DefaultGameWorld):
     def mapGeneration(self):
         centerX = (Match.maxX+1)/2
         centerY = (Match.maxY+1)/2
-        startX = 2
-        startY = 2
-        self.addObject(Plant(self, centerX + startX, centerY + startY, self.players[0]))
-        self.addObject(Plant(self, centerX - startX, centerY - startY, self.players[1]))
+        plants = [Plant(self, centerX - 1, centerY - 1, self.players[0]), Plant(self, centerX , centerY, self.players[1])]
+        for i in plants:
+            i.leaf = 1
+            self.addObject(i)
 
     def nextTurn(self):
         self.turnNum += 1
