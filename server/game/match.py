@@ -80,8 +80,6 @@ class Match(DefaultGameWorld):
         for obj in self.objects.values():
             obj.nextTurn()
 
-        #self.dealBarkDamage()
-
         self.sendStatus(itertools.chain(self.players, self.spectators))
 
         for obj in self.objects.values():
@@ -173,12 +171,12 @@ class Match(DefaultGameWorld):
                     self.players[1].score, self.players[0].light,
                     self.players[1].light, Match.maxX, Match.maxY])
         typeLists = defaultdict(list)
+        typeLists[plant.Plant]
         for obj in self.objects.values():
             typeLists[obj.__class__].append(obj)
         for type in typeLists.keys():
-            if (len(typeLists[type]) > 0):
-                msg.append([type.__name__] +
-                           [j.toList() for j in typeLists[type]])
+           msg.append([type.__name__] +
+                       [j.toList() for j in typeLists[type]])
         return msg
 
     @requireReferences(Plant)

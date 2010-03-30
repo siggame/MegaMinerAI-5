@@ -20,6 +20,7 @@
 import sexpr.sexpr as sexpr
 from config.config import getUserInfo
 from networking.Filter import Filter
+import traceback
 
 LOGIN_CONFIG = 'config/login.cfg'
 
@@ -40,6 +41,7 @@ class SexprHandlerMixin(object):
             self.statements[expression[0]](self, expression)
         except Exception, e:
             print e
+            traceback.print_exc()
             self.writeSExpr(['malformed-statement', expression])
 
 class LogicFilter(Filter, SexprHandlerMixin):
