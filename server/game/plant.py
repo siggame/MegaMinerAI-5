@@ -75,7 +75,7 @@ class Plant(MappableObject):
             return str(self.id) + " cannot grow root; not enough resources: have %s, need %s" % (self.owner.light, Plant.rootCost)
         
         self.root = 1
-        self.heath += self.techLevelRoot
+        self.health += self.techLevelRoot
         self.owner.light -= Plant.rootCost
         self.canAct -= 1
         return True
@@ -115,7 +115,7 @@ class Plant(MappableObject):
         except IndexError:
             return "Cannot spread; outside the world."
             
-        if self.owner.light < Plant.cost:
+        if self.owner.light < cost:
             return "Cannot spread; not enough resources: have %s, need %s" % (self.owner.light, cost)
         
         self.owner.light -= cost
@@ -166,7 +166,7 @@ class Plant(MappableObject):
 
     def nextTurn(self):
         MappableObject.nextTurn(self)
-        if (self.owner == self.game.turn):
+        if (self.owner != self.game.turn):
             self.owner.light += self.techLevelLeaf * self.leaf  + Plant.minLight
             self.owner.score += self.techLevelLeaf * self.leaf + Plant.minLight
 
