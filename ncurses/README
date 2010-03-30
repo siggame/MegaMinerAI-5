@@ -13,9 +13,15 @@ To run visualizer:
    -   | Decrease Speed
    >   | Go ahead one frame
    <   | Go back one frame
+   E   | Go to last frame
+   S   | Go to first frame
  Left  | Move Cursor Left
  Right | Move Cursor Right
   Up   | Move Cursor Up
  Down  | Move Cursor Down
+
+
+If for any reason the visualizer does not exit cleanly and the terminal is bugged, type "reset" into your bash prompt and hit enter.
+Note: This works even if you cannot see the text.
 
 
