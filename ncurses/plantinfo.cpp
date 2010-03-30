@@ -28,6 +28,10 @@ void Plantinfo::update()
     INFO_PRINT( Root LvlUp, rootLevelUp );
     INFO_PRINT( Leaf LvlUp, leafLevelUp );
     INFO_PRINT( Flower LvlUp, flowerLevelUp );
+    ++i;
+    // Check if plant is talking
+    
+    
 
   } else {
     mvwprintw( mWindow, 1, 2, "Empty" );

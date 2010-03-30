@@ -40,7 +40,7 @@ void Scoreboard::update()
   
   wattrset( mWindow, COLOR_PAIR( INSTRUCTIONS ) );
   
-  line = 26;
+  line = 24;
   
   mvwprintw( mWindow, line++, 3, "Visualizer Usage:" );
   mvwprintw( mWindow, line++, 3, "Q     | Quit" );
@@ -50,6 +50,8 @@ void Scoreboard::update()
   mvwprintw( mWindow, line++, 3, "-     | Decrease Speed" );
   mvwprintw( mWindow, line++, 3, ">     | Go ahead one frame" );
   mvwprintw( mWindow, line++, 3, "<     | Go back one frame" );
+  mvwprintw( mWindow, line++, 3, "E     | Go to last frame" );
+  mvwprintw( mWindow, line++, 3, "S     | Go to first frame" );
   mvwprintw( mWindow, line++, 3, "Left  | Move Cursor Left" );
   mvwprintw( mWindow, line++, 3, "Right | Move Cursor Right" );
   mvwprintw( mWindow, line++, 3, "Up    | Move Cursor Up" );

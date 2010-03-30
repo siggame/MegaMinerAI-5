@@ -9,8 +9,8 @@ Viscontrol::Viscontrol( int x, int y, Game *g )
   frameNumber = 0;
   playSpeed = 40;
 
-  maxX = g->states[0].boardX-1;
-  maxY = g->states[0].boardY-1;
+  maxX = g->states[0].boardX;
+  maxY = g->states[0].boardY;
 
   moveWindow( x, maxY*2+4 ); 
 
@@ -87,6 +87,12 @@ int Viscontrol::run()
     case ',':
       updateMode( MODE_PAUSE );
       prevFrame();
+      break;
+    case 's':
+      frameNumber = 0;
+      break;
+    case 'e':
+      frameNumber = game->states.size()-1;
       break;
     case KEY_LEFT:
       --curX;

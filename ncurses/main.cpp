@@ -18,7 +18,11 @@ int main(int argc, char** argv)
   Game g;
   if( argc > 1 )
   {
-    parseFile( g, argv[1] );
+    if( !parseFile( g, argv[1] ) )
+    {
+      printf( "ERROR: Invalid Gamelog or Gamelog NOT FOUND!\nIf you need assistant please read README\n" );
+      return 0;
+    }
   }
   else
   {
