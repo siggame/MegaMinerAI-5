@@ -4,7 +4,7 @@ import structures
 
 import data
 
-c = {int:'int', str:'char*', float:'float'}
+c = {int:'int', str:'const char*', float:'float'}
 java = {int:'int', str:'String', float:'float'}
 python = {int:'c_int', str:'c_char_p', float:'c_float'}
 
