@@ -209,7 +209,7 @@ DLLEXPORT sexp_t* extract_sexpr(const char* sexpr)
   return st;
 }
 
-DLLEXPORT char* escape_string(char* string)
+DLLEXPORT char* escape_string(const char* string)
 {
   static char* result = NULL;
   if(result)
