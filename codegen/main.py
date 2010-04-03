@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/usl/bin/env python
 import data
 import structures
 from util import *

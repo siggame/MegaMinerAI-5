@@ -21,7 +21,7 @@ extern "C"
   DLLEXPORT const char* rec_string(int socket);
   
   DLLEXPORT sexp_t* extract_sexpr(const char* sexpr);
-  DLLEXPORT char* escape_string(char* string);
+  DLLEXPORT char* escape_string(const char* string);
 #ifdef __cplusplus
 }
 #endif
