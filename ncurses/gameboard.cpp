@@ -1,21 +1,51 @@
 #include "gameboard.h"
 #include <string.h>
 
+#include "visettings.h"
+
+char playerText[][41] = {
+  " ______ _       _____   _____________   ",
+  " | ___ \\ |     / _ \\ \\ / /  ___| ___ \\  ",
+  " | |_/ / |    / /_\\ \\ V /| |__ | |_/ /  ",
+  " |  __/| |    |  _  |\\ / |  __||    /   ",
+  " | |   | |____| | | || | | |___| |\\ \\   ",
+  " \\_|   \\_____/\\_| |_/\\_/ \\____/\\_| \\_|  "
+};
+
+char playerOneText[][41] = {
+ "                   __                   ",
+ "                  /  |                  ",
+ "                  `| |                  ",
+ "                   | |                  ",
+ "                  _| |_                 ",
+ "                  \\___/                 "
+
+};
+
+char playerTwoText[][41] = {
+ "                 _____                  ",
+ "                / __  \\                 ",
+ "                `\' / /\'                 ",
+ "                  / /                   ",
+ "                ./ /___                 ",
+ "                \\_____/                 "
+};
+
+char winsText[][41] = {
+"      _    _ _____ _   _  _____ _       ",
+"     | |  | |_   _| \\ | |/  ___| |      ",
+"     | |  | | | | |  \\| |\\ `--.| |      ",
+"     | |/\\| | | | | . ` | `--. \\ |      ",
+"     \\  /\\  /_| |_| |\\  |/\\__/ /_|      ",
+"      \\/  \\/ \\___/\\_| \\_/\\____/(_)      ",
+"                                        "
+};
+
 Gameboard::Gameboard( int x, int y, int width, int height )
 : Window( x, y, width, height )
 {
-
-  board = new char *[width-2];
-  for( int i = 0; i < width-2; i++ )
-  {
-    board[i] = new char[height-2];
-    // Initialize board to zeros
-    memset( board[i], 0, sizeof(char)*(height-2) );
-  }
-
-  boardX = (width-2)/2;
-  boardY = (height-2)/2;
-  curX = curY = 0;
+  setAttr( boardX, (width-2)/2 );
+  setAttr( boardY, (height-2)/2 );
 
   setupPieces();
   
@@ -25,99 +55,70 @@ void Gameboard::setupPieces()
 {
   //init_color( COLOR_RED, 0x5C, 0x40, 0x33 );
   
-  init_pair(18, COLOR_BLACK, COLOR_CYAN );
+  init_pair(18, getAttr(selectionF), getAttr( selectionB ) );
   
-  init_pair( PLAYER_1_COLOR, COLOR_RED, COLOR_BLACK );
-  init_pair( PLAYER_2_COLOR, COLOR_BLUE, COLOR_BLACK );
-  init_pair( PLAYER_1_PIECE_COLOR, COLOR_WHITE, COLOR_RED );
-  init_pair( PLAYER_2_PIECE_COLOR, COLOR_WHITE, COLOR_BLUE );
-  init_pair( INSTRUCTIONS, COLOR_WHITE, COLOR_BLACK );
-  init_pair( BACKGROUND_COLOR, COLOR_GREEN, COLOR_BLACK );
+  init_pair( PLAYER_1_COLOR, getAttr( p1textF ), getAttr( p1textB ) );
+  init_pair( PLAYER_2_COLOR, getAttr( p2textF ), getAttr( p2textB ) );
   
-  // Roots
-  init_pair(10, COLOR_RED, COLOR_BLACK );
-  init_pair(14, COLOR_RED, COLOR_BLACK );
-  // Leaf
-  init_pair(11, COLOR_GREEN, COLOR_BLACK );
-  init_pair(15, COLOR_GREEN, COLOR_BLACK );
-  // Flower
-  init_pair(12, COLOR_YELLOW, COLOR_BLACK );
-  init_pair(16, COLOR_YELLOW, COLOR_BLACK );
-  // Bark
-  init_pair(13, COLOR_RED, COLOR_BLACK );
-  init_pair(17, COLOR_RED, COLOR_BLACK );
-  
-  init_pair( 9, COLOR_WHITE, COLOR_BLACK );
-  
-  init_pair( 8, COLOR_CYAN, COLOR_BLACK );
-  
-  
-  #if 0
-  
-  // Background
-  
-  
-  // Header
+  init_pair( PLAYER_1_PIECE_COLOR, getAttr( p1pieceF ), getAttr( p1pieceB ) );
+  init_pair( PLAYER_2_PIECE_COLOR, getAttr( p2pieceF ), getAttr( p2pieceB ));  
 
-  // Player 1
+  init_pair( INSTRUCTIONS, getAttr( instrF ), getAttr( instrB ) );
+  init_pair( BACKGROUND_COLOR, getAttr( backgroundF ), getAttr( backgroundB ) );
   
-  
-  pieces[0][P_ROOT].keyCode0 = 'r';
-  pieces[0][P_ROOT].color = 10;
-  pieces[0][P_LEAF].keyCode0 = 'l';
-  pieces[0][P_LEAF].color = 11;
-  pieces[0][P_FLOWER].keyCode0 = 'f';
-  pieces[0][P_FLOWER].color = 12;
-  pieces[0][P_BARK].keyCode0 = 'b';
-  pieces[0][P_BARK].color = 13;
-  
-  pieces[1][P_ROOT].keyCode0 = 'R';
-  pieces[1][P_ROOT].color = 14;
-  pieces[1][P_LEAF].keyCode0 = 'L';
-  pieces[1][P_LEAF].color = 15;
-  pieces[1][P_FLOWER].keyCode0 = 'F';
-  pieces[1][P_FLOWER].color = 16;
-  pieces[1][P_BARK].keyCode0 = 'B';
-  pieces[1][P_BARK].color = 17;
-  
-  #endif
-  background.keyCode0 = ACS_CKBOARD;//ACS_LANTERN;
-  background.color = 9;
+  background = ACS_CKBOARD;//ACS_LANTERN;
   
 }
 
-void Gameboard::newState( GameState state )
+void Gameboard::newState( )
 {
+  
+  GameState state = *getAttr( state );
+  
+  // Bounds check on cursor
+  if( getAttr( curX ) < 0 )
+    setAttr( curX, 0 );
+  if( getAttr( curX ) > (getWidth()-3)/2 )
+    setAttr( curX, (getWidth()-3)/2 );
+  if( getAttr( curY ) < 0 )
+    setAttr( curY, 0 );
+  if( getAttr( curY ) > (getHeight()-3)/2 )
+    setAttr( curY, (getHeight()-3)/2 );
+  
   
     // Clear the board
 
-  for( int i = 0; i < boardX; i++ )
-    for( int j = 0; j < boardY; j++ )
+  for( int i = 0; i < getAttr(boardX); i++ )
+    for( int j = 0; j < getAttr(boardY); j++ )
     {
-      if( curX == i && curY == j )
+      if( getAttr(curX) == i && getAttr(curY) == j )
         wattron( mWindow, COLOR_PAIR( 18 ) );
       else
         wattron( mWindow, COLOR_PAIR( BACKGROUND_COLOR ) );
 
-      mvwaddch( mWindow, 1+j*2, 1+i*2, background.keyCode0 );
-      mvwaddch( mWindow, 1+j*2, 2+i*2, background.keyCode0 );
-      mvwaddch( mWindow, 2+j*2, 1+i*2, background.keyCode0 );
-      mvwaddch( mWindow, 2+j*2, 2+i*2, background.keyCode0 );
+      mvwaddch( mWindow, 1+j*2, 1+i*2, background );
+      mvwaddch( mWindow, 1+j*2, 2+i*2, background );
+      mvwaddch( mWindow, 2+j*2, 1+i*2, background );
+      mvwaddch( mWindow, 2+j*2, 2+i*2, background );
 
-      if( curX == i && curY == j )
+      if( getAttr(curX) == i && getAttr(curY) == j )
         wattroff( mWindow, COLOR_PAIR( 18 ) );
       else
         wattroff( mWindow, COLOR_PAIR( BACKGROUND_COLOR ) );
     }
 
+  bool plant = false;
+
   // Draw them plants.
   for( std::vector<Plant>::iterator i = state.plants.begin(); i != state.plants.end(); i++ )
   {
-      //char *piece = &board[i->x][i->y];
-	    
-      //Piece *currentPiece = &pieces[i->ownerID][i->objectID];
-      if( i->x == curX && i->y == curY )
+
+      if( i->x == getAttr(curX) && i->y == getAttr(curY) )
+      {
         wattron( mWindow, COLOR_PAIR( 18 ) );
+        setAttr( plant, &(*i) );
+        plant = true;
+      }
       else
         wattron( mWindow, COLOR_PAIR( PLAYER_1_PIECE_COLOR+i->ownerID ) );
 
@@ -125,17 +126,21 @@ void Gameboard::newState( GameState state )
 
       // Health Progression:
       // We can modify these numbers:
-      if( i->health >= 100 )
-        ch = ACS_GEQUAL;
-      else if( i->health >= 75 )
-        ch = '>';
-      else if( i->health >= 50 )
-        ch = '=';
-      else if( i->health >= 25 )
-        ch = '<';
+      
+      if( i->health >= 20 )
+        ch = ACS_S1;
+      else if( i->health >= 15 )
+        ch = ACS_S3;
+      else if( i->health >= 10 )
+        ch = ACS_S7;
+      else if( i->health >= 5 )
+        ch = ACS_S9;
       else
-        ch = ACS_LEQUAL;
+        ch = '_';
+
+      wattron( mWindow, A_BOLD );
       mvwaddch( mWindow, i->y*2+2, i->x*2+2, ch );
+      wattroff( mWindow, A_BOLD );
       
       // Flower
       if( i->flower )
@@ -158,17 +163,93 @@ void Gameboard::newState( GameState state )
       mvwaddch( mWindow, i->y*2+1, i->x*2+2, ch );
 
       
-      if( i->x == curX && i->y == curY )
+      if( i->x == getAttr(curX) && i->y == getAttr(curY) )
         wattroff( mWindow, COLOR_PAIR( 18 ) );
       else
         wattroff( mWindow, COLOR_PAIR( 10 ) );
       
   }
   
+  if( !plant )
+    setAttr( plant, 0 );
+  
+  update();
+  
+  if( getAttr( turnNumber ) == 499 && getAttr( winAnimation ) )
+  {
+    if( getAttr( player1Score ) >= getAttr( player2Score ) )
+      playWinAnim( 1 );
+    else
+      playWinAnim( 2 );
+    
+    setAttr( winAnimation, false );
+  }
+  
 }
 
-void Gameboard::setCursor( int x, int y )
+void Gameboard::playWinAnim( int player )
 {
-  curX = x;
-  curY = y;
+  timeout( 75 );
+  int c;
+  
+  int offsetY = 8;
+  int offsetX = 0;
+  
+  wattron( mWindow, COLOR_PAIR(PLAYER_1_PIECE_COLOR+player-1) );
+  wattron( mWindow, A_BOLD );
+  
+  for( int i = 0; i < 6; i++ )
+  {
+    for( int j = 0; j < 40; j++ )
+    {
+      if( playerText[i][j] == 0 )
+        break;
+      mvwaddch( mWindow, i+1+offsetY, j+1+offsetX, playerText[i][j] );
+    }
+    update();
+    c = getch();
+  }
+  
+  offsetY += 6;
+  
+  for( int i = 0; i < 6; i++ )
+  {
+    for( int j = 0; j < 40; j++ )
+    {
+
+      if( player == 1 )
+      {
+        if( playerOneText[i][j] == 0 )
+          break;
+        mvwaddch( mWindow, i+1+offsetY, j+1+offsetX, playerOneText[i][j] );
+      } else {
+        if( playerTwoText[i][j] == 0 )
+          break;
+        mvwaddch( mWindow, i+1+offsetY, j+1+offsetX, playerTwoText[i][j] );        
+      }
+    }
+    update();
+    c = getch();
+  }  
+  
+  offsetY += 6;
+  
+  for( int i = 0; i < 7; i++ )
+  {
+    for( int j = 0; j < 40; j++ )
+    {
+      if( winsText[i][j] == 0 )
+        break;
+      mvwaddch( mWindow, i+1+offsetY, j+1+offsetX, winsText[i][j] );
+    }
+    update();
+    c = getch();
+  }  
+  
+  
+  wattroff( mWindow, (PLAYER_1_PIECE_COLOR+player-1) );
+  wattroff( mWindow, A_BOLD );
+  timeout( -1 );
+  c = getch();
 }
+

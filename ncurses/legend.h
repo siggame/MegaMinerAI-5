@@ -13,13 +13,4 @@
 #define PLAYER_2_PIECE_COLOR 6
 #define BACKGROUND_COLOR 7
 
-struct Piece
-{
-  int keyCode0;
-  int keyCode1;  // Probably won't be used
-  int color;    
-};
-
-
-
 #endif

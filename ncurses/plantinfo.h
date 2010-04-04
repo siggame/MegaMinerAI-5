@@ -6,14 +6,10 @@
 
 class Plantinfo : public Window
 {
-  private:
-    Plant *plant;
-    
   public:
     Plantinfo( int x, int y, int width, int height );
     
     void update();
-    void givePlant( Plant *p );
     
 };
 

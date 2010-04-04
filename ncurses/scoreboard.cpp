@@ -1,21 +1,19 @@
 #include "scoreboard.h"
 #include "legend.h"
+#include "visettings.h"
 
 Scoreboard::Scoreboard( int x, int y, int width, int height ) : Window( x, y, width, height )
 {
-  turn = 0;
-  p1score = p2score = 0;
-//  p1light = p2light = 0;
-//  p1water = p2water = 0;
+
 }
 
 void Scoreboard::update()
 {
-  wattrset( mWindow, COLOR_PAIR( 9 ) );
+  wattrset( mWindow, COLOR_PAIR( INSTRUCTIONS ) );
   
   int line = 1;
   
-  mvwprintw( mWindow, line++, 2, "Turn: %d      ", turn );
+  mvwprintw( mWindow, line++, 2, "Turn: %d      ", getAttr( turnNumber ) );
   
   wattrset( mWindow, COLOR_PAIR( PLAYER_1_COLOR ) );
   mvwprintw( mWindow, line++, 2, "---------------------------" );
@@ -23,9 +21,8 @@ void Scoreboard::update()
   mvwprintw( mWindow, line++, 3, "Player 1" );
   wattroff( mWindow, A_BOLD );
   mvwprintw( mWindow, line++, 2, "---------------------------" );
-  mvwprintw( mWindow, line++, 3, "Score: %d       ", p1score );
-//  mvwprintw( mWindow, 5, 3, "Light: %d      ", p1light );
-//  mvwprintw( mWindow, 6, 3, "Water: %d      ", p1water );
+  mvwprintw( mWindow, line++, 3, "Score: %d       ", getAttr( player1Score ) );
+  mvwprintw( mWindow, line++, 3, "Light: %d       ", getAttr( player1Light ) );
   
   wattrset( mWindow, COLOR_PAIR( PLAYER_2_COLOR ) );
   
@@ -36,11 +33,12 @@ void Scoreboard::update()
   mvwprintw( mWindow, line++, 3, "Player 2" );
   wattroff( mWindow, A_BOLD );
   mvwprintw( mWindow, line++, 2, "---------------------------" );
-  mvwprintw( mWindow, line++, 3, "Score: %d       ", p2score );
+  mvwprintw( mWindow, line++, 3, "Score: %d       ", getAttr( player2Score ) );
+  mvwprintw( mWindow, line++, 3, "Light: %d       ", getAttr( player2Light ) );
   
   wattrset( mWindow, COLOR_PAIR( INSTRUCTIONS ) );
   
-  line = 24;
+  line = 26;
   
   mvwprintw( mWindow, line++, 3, "Visualizer Usage:" );
   mvwprintw( mWindow, line++, 3, "Q     | Quit" );
@@ -58,22 +56,8 @@ void Scoreboard::update()
   mvwprintw( mWindow, line++, 3, "Down  | Move Cursor Down" );
   
   
-
-  
   wattroff( mWindow, COLOR_PAIR( 8 ) );
   
   wrefresh( mWindow );
    
-}
-
-void Scoreboard::updateScore( int rTurn, int p1Score, int p2Score )
-{
- turn = rTurn;
- p1score = p1Score;
- p2score = p2Score;
-// p1light = rP1light;
-// p1water = rP1water;
-// p2light = rP2light;
-// p2water = rP2water;
- 
 }

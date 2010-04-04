@@ -1,4 +1,5 @@
 #include "viscontrol.h"
+#include "visettings.h"
 
 Viscontrol::Viscontrol( int x, int y, Game *g ) 
   : Window( x, y, 200, 1 )
@@ -9,17 +10,23 @@ Viscontrol::Viscontrol( int x, int y, Game *g )
   frameNumber = 0;
   playSpeed = 40;
 
-  maxX = g->states[0].boardX;
-  maxY = g->states[0].boardY;
+  setAttr( maxX, g->states[0].boardX );
+  setAttr( maxY, g->states[0].boardY );
 
-  moveWindow( x, maxY*2+4 ); 
+  moveWindow( x, getAttr( maxY )*2+4 ); 
 
-  gameboard = new Gameboard( x, y, maxX*2+4, maxY*2+4 );
-  score = new Scoreboard( x+maxX*2+5, y, 31, maxY*2+4 );
-  plantInfo = new Plantinfo( x+maxX*2+5+31, y, 23, maxY*2+4 );
+  gameboard = new Gameboard( x, y, getAttr(maxX)*2+4, getAttr(maxY)*2+4 );
+  score = new Scoreboard( x+getAttr(maxX)*2+5, y, 31, getAttr(maxY)*2+4 );
+  plantInfo = new Plantinfo( x+getAttr(maxX)*2+5+31, y, 32, getAttr(maxY)+1 );
+  minimap = new Minimap( 
+    x+getAttr(maxX)*2+5+31 + 30/2 - getAttr(maxX)/2,  // XPOS
+    getAttr(maxY)+1, // YPOS
+    getAttr(maxX)+3,  // WIDTH
+    getAttr(maxY)+3 );// HEIGHT );
   game = g;
  
-  curX = curY = 0;
+  setAttr( curX, 0 );
+  setAttr( curY, 0 );
   
   selected = false;
   
@@ -46,7 +53,13 @@ void Viscontrol::updateMode( int mode )
 
 int Viscontrol::run()
 {
-  update();
+  static bool firstRun = true;
+  if( firstRun )
+  {
+    update();
+    firstRun = false;
+  }
+  
   if( selected )
   {
     timeout( speed );
@@ -61,9 +74,9 @@ int Viscontrol::run()
     case ' ':
     case 'p':
       if( currentMode == MODE_PAUSE )
-	updateMode( MODE_PLAY );
+        updateMode( MODE_PLAY );
       else // Play/Rewind
-	updateMode( MODE_PAUSE );
+        updateMode( MODE_PAUSE );
       break;
     case 'r':
       updateMode( MODE_REWIND );
@@ -95,60 +108,32 @@ int Viscontrol::run()
       frameNumber = game->states.size()-1;
       break;
     case KEY_LEFT:
-      --curX;
+      setAttr( curX, getAttr( curX ) - 1 );
       break;
     case KEY_RIGHT:
-      ++curX;
+      setAttr( curX, getAttr( curX ) + 1 );
       break;
     case KEY_UP:
-      --curY;
+      setAttr( curY, getAttr( curY ) - 1 );
       break;
     case KEY_DOWN:
-      ++curY;
+      setAttr( curY, getAttr( curY ) + 1 );
       break;
     }
     
-    if( curX < 0 )
-      curX = 0;
-    if( curX > (gameboard->getWidth()-3)/2 )
-      curX = (gameboard->getWidth()-3)/2;
-    if( curY < 0 )
-      curY = 0;
-    if( curY > (gameboard->getHeight()-3)/2 )
-      curY = (gameboard->getHeight()-3)/2;
-
-    bool plant = false;
-
     if( currentMode == MODE_PLAY )    
       nextFrame();
     else if( currentMode == MODE_REWIND )
-      prevFrame();
-    
-    for( std::vector<Plant>::iterator i = game->states[frameNumber].plants.begin(); i != game->states[frameNumber].plants.end(); i++ )
-    {
-      if( i->x == curX && i->y == curY )
-      {
-	
-	plantInfo->givePlant( &(*i) );
-	plant = true;
-      }
-      
-    }
-    
-    if( !plant )
-      plantInfo->givePlant( 0 );
-    
-    gameboard->setCursor( curX, curY );
+      prevFrame();    
     
   } else 
   {
 
     if( currentMode == MODE_PLAY )    
-	nextFrame();
+      nextFrame();
     else if( currentMode == MODE_REWIND )
-	prevFrame();
+      prevFrame();
   }
-    
 
   update();
   
@@ -160,34 +145,43 @@ void Viscontrol::update()
   
   refresh();
   
-  gameboard->newState( game->states[frameNumber] );
- // score->updateScore( game->states[frameNumber].turnNumber, game->states[frameNumber].player0Light, game->states[frameNumber].player0Water, game->states[frameNumber].player1Light, game->states[frameNumber].player1Water );
-  score->updateScore( game->states[frameNumber].turnNumber, game->states[frameNumber].player0Score, game->states[frameNumber].player1Score );
-  plantInfo->update();
+  setAttr( state, &game->states[frameNumber] );
   
-  gameboard->update();
+
+  setAttr( turnNumber, game->states[frameNumber].turnNumber );
+  setAttr( player1Score, game->states[frameNumber].player0Score );
+  setAttr( player2Score, game->states[frameNumber].player1Score );
+  setAttr( player1Light, game->states[frameNumber].player0Light );
+  setAttr( player2Light, game->states[frameNumber].player1Light );
+  
   score->update();
+  minimap->newState();
+  gameboard->newState();
+  plantInfo->update();  
+  
+
+  
   
   const int offset = 50; 
   
   float percent = (float)(frameNumber+1)/game->states.size();
   
-  int blocks = (maxX*2+offset-10)*percent;
+  int blocks = (getAttr(maxX)*2+offset-10)*percent;
   
   for( int i = 1; i < blocks+1; i++ )
     mvwaddch( mWindow, 0, i, ACS_HLINE );
-  for( int i = blocks+1; i < maxX*2+offset-9; i++ )
+  for( int i = blocks+1; i < getAttr(maxX)*2+offset-9; i++ )
     mvwaddch( mWindow, 0, i, ' ' );
   
   mvwaddch( mWindow, 0, 0, ACS_LLCORNER );
-  mvwaddch( mWindow, 0, maxX*2+offset-9, ACS_LRCORNER );
+  mvwaddch( mWindow, 0, getAttr(maxX)*2+offset-9, ACS_LRCORNER );
   
   if( currentMode == MODE_PAUSE )
-    mvwprintw( mWindow, 0, maxX*2+offset-7, "PAUSED      " );
+    mvwprintw( mWindow, 0, getAttr(maxX)*2+offset-7, "PAUSED      " );
   else if( currentMode == MODE_PLAY )
-    mvwprintw( mWindow, 0, maxX*2+offset-7, "PLAYING     " );
+    mvwprintw( mWindow, 0, getAttr(maxX)*2+offset-7, "PLAYING     " );
   else if( currentMode == MODE_REWIND )
-    mvwprintw( mWindow, 0, maxX*2+offset-7, "REWINDING   " );
+    mvwprintw( mWindow, 0, getAttr(maxX)*2+offset-7, "REWINDING   " );
   
   
   wrefresh( mWindow );
@@ -196,6 +190,7 @@ void Viscontrol::update()
 
 void Viscontrol::nextFrame()
 {
+  
   ++frameNumber;
   if( frameNumber > game->states.size()-1 )
     frameNumber = game->states.size()-1;
