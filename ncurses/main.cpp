@@ -30,6 +30,8 @@ int main(int argc, char** argv)
     return 0;
   }
   
+  visettings::instance()->loadFromFile();
+  
   initscr();  
   cbreak();
   noecho();  
@@ -37,7 +39,7 @@ int main(int argc, char** argv)
   keypad(stdscr, TRUE);
   
   // Initialize Colors Here:
-  start_color();
+  start_color(); 
   
   Viscontrol *game1 = new Viscontrol( 0, 0, &g );
   

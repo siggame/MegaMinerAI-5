@@ -5,6 +5,7 @@
 #include "scoreboard.h"
 #include "gameboard.h"
 #include "plantinfo.h"
+#include "minimap.h"
 #include "../visualizer/structures.h"
 
 #define MODE_PLAY 0
@@ -25,12 +26,7 @@ class Viscontrol : public Window
     Gameboard *gameboard;
     Scoreboard *score;
     Plantinfo *plantInfo;
-    
-    int curX;
-    int curY;
-
-    int maxX;
-    int maxY;
+    Minimap *minimap;
 
     int playSpeed;
     

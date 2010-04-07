@@ -1,13 +1,18 @@
 #include "plantinfo.h"
 
+#include "visettings.h"
+
+#include <stdio.h>
+#include <string.h>
+
 Plantinfo::Plantinfo( int x, int y, int width, int height )
   : Window( x, y, width, height )
 {
-  plant = 0;
+  
   
 }
 
-#define INFO_PRINT( y, z ) { mvwprintw( mWindow, i++, 2, #y": %d        ", plant->z ); }
+#define INFO_PRINT( y, z ) { mvwprintw( mWindow, i++, 2, #y": %d        ", getAttr(plant)->z ); }
 
 void Plantinfo::update()
 {
@@ -16,7 +21,7 @@ void Plantinfo::update()
   box( mWindow, 0, 0 );
   
   
-  if( plant )
+  if( getAttr(plant) )
   {
     mvwprintw( mWindow, 1, 2, "Plant Info" );
     int i = 3;
@@ -28,9 +33,29 @@ void Plantinfo::update()
     INFO_PRINT( Root LvlUp, rootLevelUp );
     INFO_PRINT( Leaf LvlUp, leafLevelUp );
     INFO_PRINT( Flower LvlUp, flowerLevelUp );
-    ++i;
     // Check if plant is talking
-    
+    GameState state = *getAttr( state );
+    ++i;
+    for( std::vector<Animation *>::iterator j = state.animations.begin(); j != state.animations.end(); j++ )
+    {
+      if( (*j)->type == TALK )
+      {        
+        if( getAttr( plant )->objectID == ((Talk *)(*j))->plantID )
+        {
+          char *msg = ((Talk *)(*j))->message;
+          
+          while( strlen( msg ) > 28 )
+          {
+            char str[29];
+            strncpy( str, msg, 28 );
+            str[28] = '\0';
+            mvwprintw( mWindow, i++, 2, "%s", str );
+            msg += 28;
+          }
+          mvwprintw( mWindow, i++, 2, "%s", msg );
+        }
+      }
+    }
     
 
   } else {
@@ -42,7 +67,3 @@ void Plantinfo::update()
   
 }
 
-void Plantinfo::givePlant( Plant *p )
-{
-  plant = p;
-}

@@ -10,21 +10,12 @@
 class Gameboard : public Window
 {
   private:
-    //Piece pieces[2][4];
-    Piece background;
-    void setupPieces();
-    
-    char **board;
-    void drawBoard();
-    
-    int curX, curY;
-    int boardX, boardY;
-       
+    int background;
+    void setupPieces();       
   public:
     Gameboard( int x, int y, int width, int height ) ;
-    void newState( GameState state );
-    
-    void setCursor( int x, int y );
+    void newState();
+    void playWinAnim( int player );
   
 };
 
