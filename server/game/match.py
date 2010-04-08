@@ -88,6 +88,19 @@ class Match(DefaultGameWorld):
         self.checkWinner()
 
     def checkWinner(self):
+    player0died = True
+    player1died = True
+    for obj in self.objects.values():
+        if obj.owner == self.players[0]:
+        player0died = False
+        if obj.owner == self.players[1]:
+        player1died = False
+        if not player0died and not player1died:
+        break
+    if player0died:
+        self.declareWinner(self.players[1])
+    if player1died:
+        self.declareWinner(self.players[0])
         if (self.turnNum >= self.turnLimit):
             if (self.netWorth(self.players[0]) > \
               self.netWorth(self.players[1])):

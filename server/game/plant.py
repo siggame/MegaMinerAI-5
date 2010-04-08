@@ -57,8 +57,8 @@ class Plant(MappableObject):
             return str(self.id) + " has no actions."
         if(self.leaf):
             return str(self.id) + " cannot grow a leaf; it already has a leaf."
-        if self.owner.light < Plant.leafCost:
-            return str(self.id) + " cannot grow leaf; not enough resources: have %s, need %s" % (self.owner.light, Plant.leafCost)
+        if self.owner.light < Plant.leafCost * self.techLevelLeaf:
+            return str(self.id) + " cannot grow leaf; not enough resources: have %s, need %s" % (self.owner.light, Plant.leafCost * self.techLevelLeaf)
         
         self.leaf = 1
         self.owner.light -= Plant.leafCost
@@ -71,8 +71,8 @@ class Plant(MappableObject):
             return str(self.id) + " has no actions."
         if self.root:
             return str(self.id) + " cannot grow roots; it already has roots."
-        if self.owner.light < Plant.rootCost: 
-            return str(self.id) + " cannot grow root; not enough resources: have %s, need %s" % (self.owner.light, Plant.rootCost)
+        if self.owner.light < Plant.rootCost * self.techLevelRoot: 
+            return str(self.id) + " cannot grow root; not enough resources: have %s, need %s" % (self.owner.light, Plant.rootCost * self.techLevelRoot)
         
         self.root = 1
         self.health += self.techLevelRoot
@@ -90,7 +90,7 @@ class Plant(MappableObject):
             return str(self.id) + " cannot have negative 'up' values."
         if rootUp + leafUp + flowerUp > self.techLevelFlower:
             return str(self.id) + " flower enhancements exceed flower level"
-        if self.owner.light < Plant.flowerCost:
+        if self.owner.light < Plant.flowerCost * self.techLevelFlower:
             return str(self.id) + "cannot grow flower; not enough resources: have %s, need %s" % (self.owner.light, Plant.flowerCost)
         
         self.flower = 1
