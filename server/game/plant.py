@@ -59,9 +59,9 @@ class Plant(MappableObject):
             return str(self.id) + " cannot grow a leaf; it already has a leaf."
         if self.owner.light < Plant.leafCost * self.techLevelLeaf:
             return str(self.id) + " cannot grow leaf; not enough resources: have %s, need %s" % (self.owner.light, Plant.leafCost * self.techLevelLeaf)
-        
+        self.game.animations.append(['grow-leaf', self.id])
         self.leaf = 1
-        self.owner.light -= Plant.leafCost
+        self.owner.light -= Plant.leafCost * self.techLevelLeaf
         self.canAct -= 1
         return True
 
@@ -73,10 +73,10 @@ class Plant(MappableObject):
             return str(self.id) + " cannot grow roots; it already has roots."
         if self.owner.light < Plant.rootCost * self.techLevelRoot: 
             return str(self.id) + " cannot grow root; not enough resources: have %s, need %s" % (self.owner.light, Plant.rootCost * self.techLevelRoot)
-        
+        self.game.animations.append(['grow-root', self.id])
         self.root = 1
         self.health += self.techLevelRoot
-        self.owner.light -= Plant.rootCost
+        self.owner.light -= Plant.rootCost * self.techLevelRoot
         self.canAct -= 1
         return True
 
@@ -91,10 +91,10 @@ class Plant(MappableObject):
         if rootUp + leafUp + flowerUp > self.techLevelFlower:
             return str(self.id) + " flower enhancements exceed flower level"
         if self.owner.light < Plant.flowerCost * self.techLevelFlower:
-            return str(self.id) + "cannot grow flower; not enough resources: have %s, need %s" % (self.owner.light, Plant.flowerCost)
-        
+            return str(self.id) + "cannot grow flower; not enough resources: have %s, need %s" % (self.owner.light, Plant.flowerCost * self.techLevelFlower)
+        self.game.animations.append(['grow-flower', self.id])
         self.flower = 1
-        self.owner.light -= Plant.flowerCost
+        self.owner.light -= Plant.flowerCost * self.techLevelFlower
         self.flowerRootUp = rootUp
         self.flowerLeafUp = leafUp
         self.flowerFlowerUp = flowerUp
@@ -119,6 +119,7 @@ class Plant(MappableObject):
             return "Cannot spread; not enough resources: have %s, need %s" % (self.owner.light, cost)
         
         self.owner.light -= cost
+        self.game.animations.append(['spread', self.id, x, y])
         
         if self.game.area[(x, y)]:
             target = self.game.area[(x, y)][0]
@@ -149,7 +150,7 @@ class Plant(MappableObject):
             return "Cannot spawn; outside the wold."
         if self.owner.light < cost:
             return "Cannot spawn; not enough resources: have %s, need %s" % (self.owner.light, cost)
-        
+        self.game.animations.append(['spawn', self.id, x, y])
         self.owner.light -= cost
         newPlant = Plant(self.game, x, y, self.owner)
         newPlant.techLevelRoot = self.techLevelRoot + self.flowerRootUp
