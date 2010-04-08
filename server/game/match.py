@@ -92,18 +92,18 @@ class Match(DefaultGameWorld):
         player1died = True
         for obj in self.objects.values():
             if obj.owner == self.players[0]:
-              player0died = False
+                player0died = False
             if obj.owner == self.players[1]:
-              player1died = False
+                player1died = False
             if not player0died and not player1died:
-              break
+                break
         if player0died:
             self.declareWinner(self.players[1])
         if player1died:
             self.declareWinner(self.players[0])
             if (self.turnNum >= self.turnLimit):
                 if (self.netWorth(self.players[0]) > \
-                  self.netWorth(self.players[1])):
+                self.netWorth(self.players[1])):
                     self.declareWinner(self.players[0])
                 else:
                     self.declareWinner(self.players[1])
