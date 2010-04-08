@@ -101,12 +101,12 @@ class Match(DefaultGameWorld):
             self.declareWinner(self.players[1])
         if player1died:
             self.declareWinner(self.players[0])
-            if (self.turnNum >= self.turnLimit):
-                if (self.netWorth(self.players[0]) > \
-                self.netWorth(self.players[1])):
-                    self.declareWinner(self.players[0])
-                else:
-                    self.declareWinner(self.players[1])
+        if (self.turnNum >= self.turnLimit):
+            if (self.netWorth(self.players[0]) > \
+            self.netWorth(self.players[1])):
+                self.declareWinner(self.players[0])
+            else:
+                self.declareWinner(self.players[1])
 
     def netWorth(self, player):
         value = player.score
