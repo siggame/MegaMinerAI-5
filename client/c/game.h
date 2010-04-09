@@ -21,6 +21,7 @@ extern "C"
   DLLEXPORT int createGame();
   DLLEXPORT int joinGame(int id);
 
+  DLLEXPORT void sendTag(const char* message);
   DLLEXPORT void endTurn();
   DLLEXPORT void getStatus();
 
@@ -62,7 +63,7 @@ DLLEXPORT int plantSpawnCost(_Plant* ptr);
 
 
 
-  DLLEXPORT int networkLoop(int socket);
+DLLEXPORT int networkLoop(int socket);
 #ifdef __cplusplus
 }
 #endif

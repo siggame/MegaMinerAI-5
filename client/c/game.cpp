@@ -175,6 +175,14 @@ static int spendLight(int amount)
   return player1Light -= amount;
 }
 
+DLLEXPORT void sendTag(const char* tag)
+{
+  stringstream expr;
+  expr << "(add-tag \"" << tag
+         << "\")";
+  send_string(socket, expr.str().c_str());
+}
+
 DLLEXPORT void endTurn()
 {
   send_string(socket, "(end-turn)");
