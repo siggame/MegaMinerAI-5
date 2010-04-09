@@ -114,6 +114,28 @@ bool Plant::talk(const char* message)
   return plantTalk(ptr, message);
 }
 
+int Plant::leafCost()
+{
+  return plantLeafCost(ptr);
+}
+int Plant::rootCost()
+{
+  return plantRootCost(ptr);
+}
+int Plant::flowerCost()
+{
+  return plantFlowerCost(ptr);
+}
+
+int Plant::spreadCost()
+{
+  return plantSpreadCost(ptr);
+}
+int Plant::spawnCost()
+{
+  return plantSpawnCost(ptr);
+}
+
 
 std::ostream& operator<<(std::ostream& stream,Plant ob)
 {
