@@ -6,6 +6,7 @@
 #include <string>
 #include <cstring>
 #include <cstdlib>
+#include <cmath>
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -248,12 +249,19 @@ DLLEXPORT bool plantSpread(_Plant* object, int x, int y)
   stringstream expr;
   if(!(object->canAct) || myLight() < plantSpreadCost(object))
     return false;
+  if(x < 0 || y < 0 || x >= boardX || y >= boardY)
+    return false;
+  int dx = (abs(x - object-> x));
+  int dy = (abs(y - object-> y));
+  if(! ( (dx == 1 && dy == 0) || (dx == 0 && dy == 1) ) )
+    return false;
+
   expr << "(game-spread " << object->objectID
        << " " << x
        << " " << y
        << ")";
   send_string(socket, expr.str().c_str());
-  object->canAct = false;
+  object->canAct = 0;
   spendLight(plantSpreadCost(object));
   for(int i = 0; i < PlantCount; i++)
     if(Plants[i].x == x && Plants[i].y == y)
@@ -266,15 +274,24 @@ DLLEXPORT bool plantSpawn(_Plant* object, int x, int y)
   stringstream expr;
   if(!(object->canAct) || myLight() < plantSpawnCost(object))
     return false;
+  if(x < 0 || y < 0 || x >= boardX || y >= boardY)
+    return false;
+
+  int dx = (abs(x - object-> x));
+  int dy = (abs(y - object-> y));
+  if(! ( (dx == 1 && dy == 0) || (dx == 0 && dy == 1) ) )
+    return false;
+
   for(int i = 0; i < PlantCount; i++)
     if(Plants[i].x == x && Plants[i].y == y)
       return false;
-  expr << "(game-spawn " << object->objectID
+
+expr << "(game-spawn " << object->objectID
        << " " << x
        << " " << y
        << ")";
   send_string(socket, expr.str().c_str());
-  object->canAct = false;
+  object->canAct = 0;
   spendLight(plantSpawnCost(object));
   return true;
 }
