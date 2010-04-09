@@ -70,3 +70,7 @@ class BaseAI:
     def turnNumber():
         return library.getTurnNumber()
 
+    @staticmethod
+    def sendTag(tag):
+        return library.sendTag(tag)
+
