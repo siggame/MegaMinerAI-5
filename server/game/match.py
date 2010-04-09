@@ -101,9 +101,10 @@ class Match(DefaultGameWorld):
             self.declareWinner(self.players[1])
         if player1died:
             self.declareWinner(self.players[0])
+
         if (self.turnNum >= self.turnLimit):
             if (self.netWorth(self.players[0]) > \
-            self.netWorth(self.players[1])):
+              self.netWorth(self.players[1])):
                 self.declareWinner(self.players[0])
             else:
                 self.declareWinner(self.players[1])
@@ -182,7 +183,7 @@ class Match(DefaultGameWorld):
 
         msg.append(["game", self.turnNum, self.players[0].score,
                     self.players[1].score, self.players[0].light,
-                    self.players[1].light, Match.maxX, Match.maxY])
+                    self.players[1].light, Match.maxX+1, Match.maxY+1])
         typeLists = defaultdict(list)
         typeLists[plant.Plant]
         for obj in self.objects.values():
