@@ -226,7 +226,7 @@ DLLEXPORT bool plantGrowRoot(_Plant* object)
 DLLEXPORT bool plantGrowFlower(_Plant* object, int rootUp, int leafUp, int flowerUp)
 {
   stringstream expr;
-  if(!(object->canAct) || myLight() < plantFlowerCost(object))
+  if(!(object->canAct) || myLight() < plantFlowerCost(object) || object->flower)
     return false;
   expr << "(game-grow-flower " << object->objectID
        << " " << rootUp
