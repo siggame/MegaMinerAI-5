@@ -58,7 +58,9 @@ class Match(DefaultGameWorld):
         self.mapGeneration()
         self.turnNum = -1
         self.sendIdent(itertools.chain(self.players, self.spectators))
-
+        self.scribe.addTag(str(self.id))
+        self.scribe.addTag(self.players[0].user)
+        self.scribe.addTag(self.players[1].user)
         self.nextTurn()
         return True
 
@@ -196,6 +198,9 @@ class Match(DefaultGameWorld):
     @requireReferences(Plant)
     def talk(self, plantID, message):
         return self.objects[plantID].talk(message)
+
+    def addTag(self, message):
+        self.scribe.addTag(message, self.players.index(self.turn))
 
 loadClassDefaults()
 
