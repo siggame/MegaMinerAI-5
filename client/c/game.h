@@ -36,6 +36,10 @@ extern "C"
 
 //accessors
 
+DLLEXPORT int myLight();
+DLLEXPORT int myScore();
+
+
 DLLEXPORT int getBoardX();
 DLLEXPORT int getBoardY();
 DLLEXPORT int getGameNumber();
