@@ -54,6 +54,11 @@ class Plant {
   int rootCost();
   int flowerCost();
 
+  int leafHealthCost();
+  int rootHealthCost();
+  int flowerHealthCost();
+
+
   int spreadCost();
   int spawnCost();
   

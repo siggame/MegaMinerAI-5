@@ -138,4 +138,44 @@ class Plant
         validify();
         return Client.INSTANCE.plantGetCanAct(ptr);
     }
+    public int getLeafCost()
+    {
+        validify();
+        return Client.INSTANCE.plantLeafCost(ptr);
+    }
+    public int getRootCost()
+    {
+        validify();
+        return Client.INSTANCE.plantRootCost(ptr);
+    }
+    public int getFlowerCost()
+    {
+        validify();
+        return Client.INSTANCE.plantFlowerCost(ptr);
+    }
+    public int getLeafHealthCost()
+    {
+        validify();
+        return Client.INSTANCE.plantLeafHealthCost(ptr);
+    }
+    public int getRootHealthCost()
+    {
+        validify();
+        return Client.INSTANCE.plantRootHealthCost(ptr);
+    }
+    public int getFlowerHealthCost()
+    {
+        validify();
+        return Client.INSTANCE.plantFlowerHealthCost(ptr);
+    }
+    public int getSpreadCost()
+    {
+        validify();
+        return Client.INSTANCE.plantSpreadCost(ptr);
+    }
+    public int getSpawnCost()
+    {
+        validify();
+        return Client.INSTANCE.plantSpawnCost(ptr);
+    }
 }

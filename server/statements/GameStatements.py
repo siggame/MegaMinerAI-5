@@ -39,7 +39,7 @@ wrapper = dict_wrapper(statements)
 @require_game
 def gameChat(self, expression):
     if games[self.game].turn != self:
-        self.writeSExpr(['game-talk-denied', 'not your turn'])
+        #self.writeSExpr(['game-talk-denied', 'not your turn'])
         return False
     try:
         plantid = int(expression[1])
@@ -91,7 +91,7 @@ def gameStatus(self, expression):
 @require_game
 def gameGrowLeaf(self, expression):
     if games[self.game].turn != self:
-        self.writeSExpr(['game-grow-leaf-denied', 'not your turn'])
+        #self.writeSExpr(['game-grow-leaf-denied', 'not your turn'])
         return False
     try:
         id = int(expression[1])
@@ -110,7 +110,7 @@ def gameGrowLeaf(self, expression):
 @require_game
 def gameGrowRoot(self, expression):
     if games[self.game].turn != self:
-        self.writeSExpr(['game-grow-root-denied', 'not your turn'])
+        #self.writeSExpr(['game-grow-root-denied', 'not your turn'])
         return False
     try:
         id = int(expression[1])
@@ -130,7 +130,7 @@ def gameGrowRoot(self, expression):
 @require_game
 def gameGrowFlower(self, expression):
     if games[self.game].turn != self:
-        self.writeSExpr(['game-grow-flower-denied', 'not your turn'])
+        #self.writeSExpr(['game-grow-flower-denied', 'not your turn'])
         return False
     try:
         id = int(expression[1])
@@ -152,7 +152,7 @@ def gameGrowFlower(self, expression):
 @require_game
 def gameSpread(self, expression):
     if games[self.game].turn != self:
-        self.writeSExpr(['game-spread-denied', 'not your turn'])
+        #self.writeSExpr(['game-spread-denied', 'not your turn'])
         return False
     try:
         id = int(expression[1])
@@ -173,7 +173,7 @@ def gameSpread(self, expression):
 @require_game
 def gameSpawn(self, expression):
     if games[self.game].turn != self:
-        self.writeSExpr(['game-spawn-denied', 'not your turn'])
+        #self.writeSExpr(['game-spawn-denied', 'not your turn'])
         return False
     try:
         id = int(expression[1])
@@ -189,16 +189,22 @@ def gameSpawn(self, expression):
         return False
     return True
 
-
-
 @wrapper('end-turn')
 @require_length(1)
 @require_game
 def endTurn(self, expression):
     if games[self.game].turn != self:
-        self.writeSExpr(['end-turn-denied', 'not your turn'])
+        #self.writeSExpr(['end-turn-denied', 'not your turn'])
         return False
     games[self.game].nextTurn()
     return True
 
+@wrapper('add-tag')
+@require_length(2)
+@require_game
+def addTag(self, expression):
+    if games[self.game].turn != self:
+        return False
+    games[self.game].addTag(expression[1])
+    return True
 

@@ -127,6 +127,20 @@ int Plant::flowerCost()
   return plantFlowerCost(ptr);
 }
 
+int Plant::leafHealthCost()
+{
+  return plantLeafHealthCost(ptr);
+}
+int Plant::rootHealthCost()
+{
+  return plantRootHealthCost(ptr);
+}
+int Plant::flowerHealthCost()
+{
+  return plantFlowerHealthCost(ptr);
+}
+
+
 int Plant::spreadCost()
 {
   return plantSpreadCost(ptr);

@@ -87,4 +87,9 @@ public abstract class BaseAI
     {
         return Client.INSTANCE.getTurnNumber();
     }
+
+    void sendTag(String tag)
+    {
+        Client.INSTANCE.sendTag(tag);
+    }
 }

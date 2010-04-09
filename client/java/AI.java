@@ -19,5 +19,9 @@ class AI extends BaseAI
 
 
   //This function is called once, before your first turn
-  public void init() {}
+  public void init()
+  {
+    sendTag("shell");
+    sendTag("version 0");
+  }
 }

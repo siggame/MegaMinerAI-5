@@ -4,6 +4,7 @@ import collections
 import match
 import matchUtils
 import math
+import os
 
 Match = match.Match
 
@@ -219,3 +220,21 @@ class TestGameLogic(unittest.TestCase):
         self.game.start()
         self.game.removePlayer(self.players[0])
         self.assertEqual(self.game.winner, self.players[1])
+
+    def test_tagging(self):
+        filename = "logs/7001.tags"
+        if os.path.exists(filename):
+            os.remove(filename)
+        self.game.start()
+        self.game.addTag("first player tag")
+        self.game.nextTurn()
+        self.game.addTag("second")
+        self.game.addTag("player")
+        self.game.addTag("tags!")
+        self.game.removeObject(self.game.objects[1])
+        self.game.nextTurn()
+        expected = "7001, Username, Username\nfirst player tag\n" \
+                  +  "second, player, tags!\n"
+        file = open(filename, 'r')
+        self.assertEqual(file.read(), expected)
+

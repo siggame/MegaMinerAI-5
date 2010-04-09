@@ -10,6 +10,7 @@ public interface Client extends Library {
     int createGame();
     int joinGame(int id);
 
+    void sendTag(String message);
     void endTurn();
     void getStatus();
 
@@ -55,6 +56,15 @@ public interface Client extends Library {
     int plantGetLeafLevelUp(Pointer ptr);
     int plantGetFlowerLevelUp(Pointer ptr);
     int plantGetCanAct(Pointer ptr);
+    int plantLeafCost(Pointer ptr);
+    int plantRootCost(Pointer ptr);
+    int plantFlowerCost(Pointer ptr);
+    int plantLeafHealthCost(Pointer ptr);
+    int plantRootHealthCost(Pointer ptr);
+    int plantFlowerHealthCost(Pointer ptr);
+    int plantSpreadCost(Pointer ptr);
+    int plantSpawnCost(Pointer ptr);
+
 
 
 }
