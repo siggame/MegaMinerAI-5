@@ -58,6 +58,11 @@ DLLEXPORT int plantLeafCost(_Plant* ptr);
 DLLEXPORT int plantRootCost(_Plant* ptr);
 DLLEXPORT int plantFlowerCost(_Plant* ptr);
 
+DLLEXPORT int plantLeafHealthCost(_Plant* ptr);
+DLLEXPORT int plantRootHealthCost(_Plant* ptr);
+DLLEXPORT int plantFlowerHealthCost(_Plant* ptr);
+
+
 DLLEXPORT int plantSpreadCost(_Plant* ptr);
 DLLEXPORT int plantSpawnCost(_Plant* ptr);
 

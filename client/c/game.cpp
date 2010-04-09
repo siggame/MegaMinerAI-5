@@ -219,7 +219,7 @@ DLLEXPORT bool plantGrowRoot(_Plant* object)
   send_string(socket, expr.str().c_str());
   object->canAct = 0;
   object->root = 1;
-  object->health += object->rootLevel;
+  object->health += 2 * object->rootLevel;
   spendLight(plantRootCost(object));
   return true;
 }
@@ -265,7 +265,7 @@ DLLEXPORT bool plantSpread(_Plant* object, int x, int y)
   spendLight(plantSpreadCost(object));
   for(int i = 0; i < PlantCount; i++)
     if(Plants[i].x == x && Plants[i].y == y)
-      Plants[i].health -= object->rootLevel;
+      Plants[i].health -= 6 * object->rootLevel;
   return true;
 }
 
@@ -512,6 +512,20 @@ DLLEXPORT int plantFlowerCost(_Plant* ptr)
 {
   return ptr->flowerLevel * 5;
 }
+
+DLLEXPORT int plantLeafHealthCost(_Plant* ptr)
+{
+  return 1;
+}
+DLLEXPORT int plantRootHealthCost(_Plant* ptr)
+{
+  return 0;
+}
+DLLEXPORT int plantFlowerHealthCost(_Plant* ptr)
+{
+  return 5;
+}
+
 DLLEXPORT int plantSpreadCost(_Plant* ptr)
 {
   return (ptr->leafLevel + ptr->rootLevel + ptr->flowerLevel)  * 1;
