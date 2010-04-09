@@ -75,7 +75,7 @@ class Plant(MappableObject):
             return str(self.id) + " cannot grow root; not enough resources: have %s, need %s" % (self.owner.light, Plant.rootCost * self.techLevelRoot)
         self.game.animations.append(['grow-root', self.id])
         self.root = 1
-        self.health += self.techLevelRoot
+        self.health += Plant.rootHealth * self.techLevelRoot
         self.owner.light -= Plant.rootCost * self.techLevelRoot
         self.canAct -= 1
         return True
@@ -123,7 +123,7 @@ class Plant(MappableObject):
         
         if self.game.area[(x, y)]:
             target = self.game.area[(x, y)][0]
-            target.health -= self.techLevelRoot
+            target.health -= Plant.rootDamage * self.techLevelRoot
         else:
             newPlant = Plant(self.game, x, y, self.owner)
             newPlant.techLevelRoot = self.techLevelRoot
