@@ -189,12 +189,13 @@ DLLEXPORT void getStatus()
 DLLEXPORT bool plantGrowLeaf(_Plant* object)
 {
   stringstream expr;
-  if(!(object->canAct) || myLight() < plantLeafCost(object))
+  if(!(object->canAct) || myLight() < plantLeafCost(object) || object->leaf)
     return false;
   expr << "(game-grow-leaf " << object->objectID
        << ")";
   send_string(socket, expr.str().c_str());
-  object->canAct = false;
+  object->canAct = 0;
+  object->leaf = 1;
   spendLight(plantLeafCost(object));
   return true;
 }
@@ -202,12 +203,14 @@ DLLEXPORT bool plantGrowLeaf(_Plant* object)
 DLLEXPORT bool plantGrowRoot(_Plant* object)
 {
   stringstream expr;
-  if(!(object->canAct) || myLight() < plantRootCost(object))
+  if(!(object->canAct) || myLight() < plantRootCost(object) || object->root)
     return false;
   expr << "(game-grow-root " << object->objectID
        << ")";
   send_string(socket, expr.str().c_str());
-  object->canAct = false;
+  object->canAct = 0;
+  object->root = 1;
+  object->health += object->rootLevel;
   spendLight(plantRootCost(object));
   return true;
 }
@@ -223,7 +226,11 @@ DLLEXPORT bool plantGrowFlower(_Plant* object, int rootUp, int leafUp, int flowe
        << " " << flowerUp
        << ")";
   send_string(socket, expr.str().c_str());
-  object->canAct = false;
+  object->canAct = 0;
+  object->flower = 1;
+  object->rootLevelUp = rootUp;
+  object->leafLevelUp = leafUp;
+  object->flowerLevelUp = flowerUp;
   spendLight(plantFlowerCost(object));
   return true;
 }
