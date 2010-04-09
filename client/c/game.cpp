@@ -154,11 +154,18 @@ DLLEXPORT int joinGame(int gameNum)
   return socket;
 }
 
-static int myLight()
+DLLEXPORT int myLight()
 {
   if(playerID == 0)
     return player0Light;
   return player1Light;
+}
+
+DLLEXPORT int myScore()
+{
+  if(playerID == 0)
+    return player0Score;
+  return player1Score;
 }
 
 static int spendLight(int amount)
@@ -463,11 +470,11 @@ DLLEXPORT int getTurnNumber()
 
 DLLEXPORT int plantLeafCost(_Plant* ptr)
 {
-  return ptr->leafLevel * 2;
+  return ptr->leafLevel * 1;
 }
 DLLEXPORT int plantRootCost(_Plant* ptr)
 {
-  return ptr->rootLevel * 1;
+  return ptr->rootLevel * 2;
 }
 DLLEXPORT int plantFlowerCost(_Plant* ptr)
 {
@@ -475,9 +482,9 @@ DLLEXPORT int plantFlowerCost(_Plant* ptr)
 }
 DLLEXPORT int plantSpreadCost(_Plant* ptr)
 {
-  return (ptr->leafLevel + ptr->leafLevel + ptr->flowerLevel)  * 1;
+  return (ptr->leafLevel + ptr->rootLevel + ptr->flowerLevel)  * 1;
 }
 DLLEXPORT int plantSpawnCost(_Plant* ptr)
 {
-  return (ptr->leafLevel + ptr->leafLevel + ptr->flowerLevel) * 2;
+  return (ptr->leafLevel + ptr->rootLevel + ptr->flowerLevel + ptr->leafLevelUp + ptr->rootLevelUp + ptr->flowerLevelUp) * 2;
 }
