@@ -10,6 +10,7 @@ public interface Client extends Library {
     int createGame();
     int joinGame(int id);
 
+    void sendTag(String message);
     void endTurn();
     void getStatus();
 

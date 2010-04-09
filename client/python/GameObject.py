@@ -117,3 +117,35 @@ class Plant(GameObject):
     self.validify()
     return library.plantGetCanAct(self.ptr)
 
+  def getRootCost(self):
+    self.validify()
+    return library.plantRootCost(self.ptr)
+
+  def getLeafCost(self):
+    self.validify()
+    return library.plantLeafCost(self.ptr)
+
+  def getFlowerCost(self):
+    self.validify()
+    return library.plantFlowerCost(self.ptr)
+
+  def getRootHealthCost(self):
+    self.validify()
+    return library.plantRootHealthCost(self.ptr)
+
+  def getLeafHealthCost(self):
+    self.validify()
+    return library.plantLeafHealthCost(self.ptr)
+
+  def getFlowerHealthCost(self):
+    self.validify()
+    return library.plantFlowerHealthCost(self.ptr)
+
+  def getSpreadCost(self):
+    self.validify()
+    return library.plantSpreadCost(self.ptr)
+
+  def getSpawnCost(self):
+    self.validify()
+    return library.plantSpawnCost(self.ptr)
+

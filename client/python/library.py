@@ -25,6 +25,9 @@ library.createGame.argtypes = []
 library.joinGame.restype = c_int
 library.joinGame.argtypes = [c_int]
 
+library.sendTag.restype = None
+library.sendTag.argtypes = [c_void_p]
+
 library.endTurn.restype = None
 library.endTurn.argtypes = []
 
@@ -133,4 +136,28 @@ library.plantGetFlowerLevelUp.argtypes = [c_void_p]
 
 library.plantGetCanAct.restype = c_int
 library.plantGetCanAct.argtypes = [c_void_p]
+
+library.plantLeafCost.restype = c_int
+library.plantLeafCost.argtypes = [c_void_p]
+
+library.plantRootCost.restype = c_int
+library.plantRootCost.argtypes = [c_void_p]
+
+library.plantFlowerCost.restype = c_int
+library.plantFlowerCost.argtypes = [c_void_p]
+
+library.plantLeafHealthCost.restype = c_int
+library.plantLeafHealthCost.argtypes = [c_void_p]
+
+library.plantRootHealthCost.restype = c_int
+library.plantRootHealthCost.argtypes = [c_void_p]
+
+library.plantFlowerHealthCost.restype = c_int
+library.plantFlowerHealthCost.argtypes = [c_void_p]
+
+library.plantSpreadCost.restype = c_int
+library.plantSpreadCost.argtypes = [c_void_p]
+
+library.plantSpawnCost.restype = c_int
+library.plantSpawnCost.argtypes = [c_void_p]
 
