@@ -30,13 +30,34 @@ class Plant {
   int canAct();
 
   // Actions
+  /// Grow a leaf
   bool growLeaf();
+  
+  /// Grow a root
   bool growRoot();
+  
+  /// Grow a flower
   bool growFlower(int rootUp, int leafUp, int flowerUp);
+  
+  /// Spread
   bool spread(int x, int y);
+  
+  /// Spawn
   bool spawn(int x, int y);
+  
+  /// Talk
   bool talk(const char* message);
+  
+  
+  // Utilities
+  int leafCost();
+  int rootCost();
+  int flowerCost();
 
+  int spreadCost();
+  int spawnCost();
+  
+  /// Output to a stream
   friend std::ostream& operator<<(std::ostream& stream, Plant ob);
 };
 

@@ -154,6 +154,20 @@ DLLEXPORT int joinGame(int gameNum)
   return socket;
 }
 
+static int myLight()
+{
+  if(playerID == 0)
+    return player0Light;
+  return player1Light;
+}
+
+static int spendLight(int amount)
+{
+  if(playerID == 0)
+    return player0Light -= amount;
+  return player1Light -= amount;
+}
+
 DLLEXPORT void endTurn()
 {
   send_string(socket, "(end-turn)");
@@ -168,52 +182,78 @@ DLLEXPORT void getStatus()
 DLLEXPORT bool plantGrowLeaf(_Plant* object)
 {
   stringstream expr;
+  if(!(object->canAct) || myLight() < plantLeafCost(object))
+    return false;
   expr << "(game-grow-leaf " << object->objectID
        << ")";
   send_string(socket, expr.str().c_str());
+  object->canAct = false;
+  spendLight(plantLeafCost(object));
   return true;
 }
 
 DLLEXPORT bool plantGrowRoot(_Plant* object)
 {
   stringstream expr;
+  if(!(object->canAct) || myLight() < plantRootCost(object))
+    return false;
   expr << "(game-grow-root " << object->objectID
        << ")";
   send_string(socket, expr.str().c_str());
+  object->canAct = false;
+  spendLight(plantRootCost(object));
   return true;
 }
 
 DLLEXPORT bool plantGrowFlower(_Plant* object, int rootUp, int leafUp, int flowerUp)
 {
   stringstream expr;
+  if(!(object->canAct) || myLight() < plantFlowerCost(object))
+    return false;
   expr << "(game-grow-flower " << object->objectID
        << " " << rootUp
        << " " << leafUp
        << " " << flowerUp
        << ")";
   send_string(socket, expr.str().c_str());
+  object->canAct = false;
+  spendLight(plantFlowerCost(object));
   return true;
 }
 
 DLLEXPORT bool plantSpread(_Plant* object, int x, int y)
 {
   stringstream expr;
+  if(!(object->canAct) || myLight() < plantSpreadCost(object))
+    return false;
   expr << "(game-spread " << object->objectID
        << " " << x
        << " " << y
        << ")";
   send_string(socket, expr.str().c_str());
+  object->canAct = false;
+  spendLight(plantSpreadCost(object));
+  for(int i = 0; i < PlantCount; i++)
+    if(Plants[i].x == x && Plants[i].y == y)
+      Plants[i].health -= object->rootLevel;
   return true;
 }
 
 DLLEXPORT bool plantSpawn(_Plant* object, int x, int y)
 {
   stringstream expr;
+  if(!(object->canAct) || myLight() < plantSpawnCost(object))
+    return false;
+  for(int i = 0; i < PlantCount; i++)
+    if(Plants[i].x == x && Plants[i].y == y)
+      return false;
   expr << "(game-spawn " << object->objectID
        << " " << x
        << " " << y
        << ")";
   send_string(socket, expr.str().c_str());
+  object->canAct = false;
+  spendLight(plantSpawnCost(object));
   return true;
 }
 
@@ -418,4 +458,26 @@ DLLEXPORT int getPlayerID()
 DLLEXPORT int getTurnNumber()
 {
   return turnNumber;
+}
+
+
+DLLEXPORT int plantLeafCost(_Plant* ptr)
+{
+  return ptr->leafLevel * 2;
+}
+DLLEXPORT int plantRootCost(_Plant* ptr)
+{
+  return ptr->rootLevel * 1;
+}
+DLLEXPORT int plantFlowerCost(_Plant* ptr)
+{
+  return ptr->flowerLevel * 5;
+}
+DLLEXPORT int plantSpreadCost(_Plant* ptr)
+{
+  return (ptr->leafLevel + ptr->leafLevel + ptr->flowerLevel)  * 1;
+}
+DLLEXPORT int plantSpawnCost(_Plant* ptr)
+{
+  return (ptr->leafLevel + ptr->leafLevel + ptr->flowerLevel) * 2;
 }
