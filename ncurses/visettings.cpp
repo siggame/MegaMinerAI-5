@@ -22,11 +22,13 @@ void visettings::loadFromFile()
   
   setAttr( p1pieceF, configFile.pInt( "P1PieceForeground" ) );
   setAttr( p1pieceB, configFile.pInt( "P1PieceBackground" ) );
+  
   setAttr( p1textF, configFile.pInt( "P1TextForeground" ) );
   setAttr( p1textB, configFile.pInt( "P1TextBackground" ) );
   
   setAttr( p2pieceF, configFile.pInt( "P2PieceForeground" ) );
   setAttr( p2pieceB, configFile.pInt( "P2PieceBackground" ) );
+  
   setAttr( p2textF, configFile.pInt( "P2TextForeground" ) );
   setAttr( p2textB, configFile.pInt( "P2TextBackground" ) );
   
@@ -42,4 +44,7 @@ void visettings::loadFromFile()
   setAttr( defaultF, configFile.pInt( "DefaultForeground" ) );
   setAttr( defaultB, configFile.pInt( "DefaultBackground" ) );
   
+  setAttr( alwaysWin, configFile.pBool( "AlwaysPlayWin" ) );
+  
+  setAttr( playSpeed, configFile.pInt( "DefaultSpeed" ) );
 }

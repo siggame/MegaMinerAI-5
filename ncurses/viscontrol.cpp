@@ -4,14 +4,17 @@
 Viscontrol::Viscontrol( int x, int y, Game *g ) 
   : Window( x, y, 200, 1 )
 {
-
-  currentMode = MODE_PAUSE; 
-  speed = -1; // ms
-  frameNumber = 0;
-  playSpeed = 40;
+  setAttr( currentMode, MODE_PAUSE );
+  setAttr( speed, -1 );
+  
+  setAttr( frameNumber, 0 );
 
   setAttr( maxX, g->states[0].boardX );
   setAttr( maxY, g->states[0].boardY );
+  
+  cerr << g->players[0].c_str() << endl << g->players[1].c_str() << endl;
+  setAttr( player1Name, (char *)g->players[0].c_str() );
+  setAttr( player2Name, (char *)g->players[1].c_str() );
 
   moveWindow( x, getAttr( maxY )*2+4 ); 
 
@@ -42,11 +45,11 @@ Viscontrol::~Viscontrol()
 void Viscontrol::updateMode( int mode )
 {
 
-  currentMode = mode;
+  setAttr( currentMode, mode );
   if( (mode == MODE_PLAY) || (mode == MODE_REWIND) )
-    speed = playSpeed;
+    setAttr( speed, getAttr( playSpeed) );
   else if( mode == MODE_PAUSE )
-    speed = -1;
+    setAttr( speed, -1 );
   
   
 }
@@ -62,7 +65,7 @@ int Viscontrol::run()
   
   if( selected )
   {
-    timeout( speed );
+    timeout( getAttr( speed ) );
     int c;
     c = getch();
     
@@ -73,7 +76,7 @@ int Viscontrol::run()
       break;
     case ' ':
     case 'p':
-      if( currentMode == MODE_PAUSE )
+      if( getAttr( currentMode ) == MODE_PAUSE )
         updateMode( MODE_PLAY );
       else // Play/Rewind
         updateMode( MODE_PAUSE );
@@ -86,26 +89,26 @@ int Viscontrol::run()
       nextFrame();
       break;
     case '=':
-      playSpeed -= 5;
-      if( playSpeed < 0 )
-        playSpeed = 1;
-      updateMode( currentMode );
-      timeout(playSpeed);
+      setAttr( playSpeed, getAttr( playSpeed ) - 5  );
+      if( getAttr( playSpeed ) < 0 )
+        setAttr( playSpeed, 1 );
+      updateMode( getAttr( currentMode ) );
+      timeout( getAttr( playSpeed ) );
       break;
     case '-':
-      playSpeed += 5;
-      updateMode( currentMode );
-      timeout(playSpeed);
+      setAttr( playSpeed, getAttr( playSpeed ) + 5 );
+      updateMode( getAttr( currentMode ) );
+      timeout( getAttr( playSpeed ) );
       break;
     case ',':
       updateMode( MODE_PAUSE );
       prevFrame();
       break;
     case 's':
-      frameNumber = 0;
+      setAttr( frameNumber, 0 );
       break;
     case 'e':
-      frameNumber = game->states.size()-1;
+      setAttr( frameNumber, game->states.size()-1 );
       break;
     case KEY_LEFT:
       setAttr( curX, getAttr( curX ) - 1 );
@@ -121,17 +124,17 @@ int Viscontrol::run()
       break;
     }
     
-    if( currentMode == MODE_PLAY )    
+    if( getAttr( currentMode ) == MODE_PLAY )    
       nextFrame();
-    else if( currentMode == MODE_REWIND )
+    else if( getAttr( currentMode ) == MODE_REWIND )
       prevFrame();    
     
   } else 
   {
 
-    if( currentMode == MODE_PLAY )    
+    if( getAttr( currentMode ) == MODE_PLAY )    
       nextFrame();
-    else if( currentMode == MODE_REWIND )
+    else if( getAttr( currentMode ) == MODE_REWIND )
       prevFrame();
   }
 
@@ -145,14 +148,15 @@ void Viscontrol::update()
   
   refresh();
   
-  setAttr( state, &game->states[frameNumber] );
+  setAttr( game, game );
+  setAttr( state, &game->states[getAttr(frameNumber)] );
   
 
-  setAttr( turnNumber, game->states[frameNumber].turnNumber );
-  setAttr( player1Score, game->states[frameNumber].player0Score );
-  setAttr( player2Score, game->states[frameNumber].player1Score );
-  setAttr( player1Light, game->states[frameNumber].player0Light );
-  setAttr( player2Light, game->states[frameNumber].player1Light );
+  setAttr( turnNumber, game->states[getAttr(frameNumber)].turnNumber );
+  setAttr( player1Score, game->states[getAttr(frameNumber)].player0Score );
+  setAttr( player2Score, game->states[getAttr(frameNumber)].player1Score );
+  setAttr( player1Light, game->states[getAttr(frameNumber)].player0Light );
+  setAttr( player2Light, game->states[getAttr(frameNumber)].player1Light );
   
   score->update();
   minimap->newState();
@@ -164,7 +168,7 @@ void Viscontrol::update()
   
   const int offset = 50; 
   
-  float percent = (float)(frameNumber+1)/game->states.size();
+  float percent = (float)(getAttr(frameNumber)+1)/game->states.size();
   
   int blocks = (getAttr(maxX)*2+offset-10)*percent;
   
@@ -176,11 +180,11 @@ void Viscontrol::update()
   mvwaddch( mWindow, 0, 0, ACS_LLCORNER );
   mvwaddch( mWindow, 0, getAttr(maxX)*2+offset-9, ACS_LRCORNER );
   
-  if( currentMode == MODE_PAUSE )
+  if( getAttr(currentMode) == MODE_PAUSE )
     mvwprintw( mWindow, 0, getAttr(maxX)*2+offset-7, "PAUSED      " );
-  else if( currentMode == MODE_PLAY )
+  else if( getAttr(currentMode) == MODE_PLAY )
     mvwprintw( mWindow, 0, getAttr(maxX)*2+offset-7, "PLAYING     " );
-  else if( currentMode == MODE_REWIND )
+  else if( getAttr(currentMode) == MODE_REWIND )
     mvwprintw( mWindow, 0, getAttr(maxX)*2+offset-7, "REWINDING   " );
   
   
@@ -191,17 +195,17 @@ void Viscontrol::update()
 void Viscontrol::nextFrame()
 {
   
-  ++frameNumber;
-  if( frameNumber > game->states.size()-1 )
-    frameNumber = game->states.size()-1;
+  setAttr( frameNumber, getAttr(frameNumber) + 1 );
+  if( getAttr(frameNumber) > game->states.size()-1 )
+    setAttr( frameNumber, game->states.size()-1 );
   
 }
 
 void Viscontrol::prevFrame()
 {
-  --frameNumber;
-  if( frameNumber < 0 )
-    frameNumber = 0;
+  setAttr( frameNumber, getAttr( frameNumber ) - 1 );
+  if( getAttr(frameNumber) < 0 )
+    setAttr( frameNumber,  0 );
 }
 
 void Viscontrol::giveSelected()

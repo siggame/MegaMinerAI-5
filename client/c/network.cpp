@@ -27,6 +27,14 @@ static int sock_server;
 DLLEXPORT int open_server_connection(const char* host, const char* port)
 {
     struct sockaddr_in addr;
+    char* address = new char[strlen(host)];
+    strncpy(address, host, strlen(host));
+    char* divide = strstr(address, port);
+    if(divide)
+    {
+      divide--;
+      *divide = NULL;
+    }
 
 #ifdef WIN32
     WSADATA wsaData;
@@ -42,14 +50,30 @@ DLLEXPORT int open_server_connection(const char* host, const char* port)
 
     // cover our DNS lookup stuff:
     struct hostent *h;
-    if((h = gethostbyname( host )) == NULL)
+    if(divide)
+    {
+      h = gethostbyname(address);
+    }
+    else
+    {
+      h = gethostbyname(host);
+    }
+    if(h == NULL)
     {
         cerr << "Unable to lookup host: " << host << endl;
         return -1;
     }
 
     addr.sin_family = AF_INET;
-    addr.sin_port = htons(atoi(port));
+    if(divide)
+    {
+      addr.sin_port = htons(atoi(divide+1));
+    }
+    else
+    {
+      addr.sin_port = htons(atoi(port));
+    }
+    delete[] address;	
     addr.sin_addr = *((struct in_addr *)h->h_addr);
     memset(addr.sin_zero, '\0', sizeof(addr.sin_zero) );
 

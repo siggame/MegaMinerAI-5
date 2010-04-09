@@ -257,7 +257,7 @@ static bool parseSexp(Game& game, sexp_t* expression)
     {
       subsub = sub->list;
       int number = atoi(subsub->val);
-      if(number > 0)
+      if(number >= 0)
       {
         subsub = subsub->next->next;
         game.players[number] = subsub->val;

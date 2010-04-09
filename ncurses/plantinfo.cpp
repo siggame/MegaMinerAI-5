@@ -43,14 +43,48 @@ void Plantinfo::update()
         if( getAttr( plant )->objectID == ((Talk *)(*j))->plantID )
         {
           char *msg = ((Talk *)(*j))->message;
+          bool nLine = false;
           
-          while( strlen( msg ) > 28 )
+          
+          for( int l = 0; l < 28; l++ )
           {
+            if( msg[l] == '\n' )
+            {
+              nLine = true;
+            }
+          }
+          
+          while( strlen( msg ) > 28 || nLine )
+          {                        
+            nLine = false;
             char str[29];
             strncpy( str, msg, 28 );
+            int n = 28;
+            
+            for( int l = 0; l < 28 && l < strlen(msg); l++ )
+            {
+              if( str[l] == '\n' )
+              {
+                
+                str[l] = '\0';
+                n = l;
+                break;
+              }
+             
+            }
             str[28] = '\0';
             mvwprintw( mWindow, i++, 2, "%s", str );
-            msg += 28;
+            msg += n+1;
+            
+            for( int l = 0; l < 28; l++ )
+            {
+              if( msg[l] == '\n' )
+              {
+                nLine = true;
+                break;
+              }
+            }
+            
           }
           mvwprintw( mWindow, i++, 2, "%s", msg );
         }

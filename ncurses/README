@@ -1,9 +1,29 @@
-VISUALIZER
-------------------------------
+------------------------------------------
+NCURSES VISUALIZER
+------------------------------------------
+
+This visualizer provides a text-based way of visualizing gamelogs or games in progress. 
+
+Table of Contents
+
+1 - RUNNING THE VISUALIZER
+2 - USING THE NCURSES VISUALIZER
+3 - CUSTOMIZING THE NCURSES VISUALIZER
+4 - NOTES AND DISCLAIMER
+
+------------------------------------------
+1 - RUNNING THE VISUALIZER
+------------------------------------------
 
 To run visualizer:
 ./visualizer megazord.gamelog
+where megazord is your gamelog name
 
+------------------------------------------
+2 - USING THE NCURSES VISUALIZER
+------------------------------------------
+
+Once the program has loaded the gamelog you may control the visualizer with the following keys:
 
   Key  |  Function
        |
@@ -20,8 +40,24 @@ To run visualizer:
   Up   | Move Cursor Up
  Down  | Move Cursor Down
 
+------------------------------------------
+3 - CUSTOMIZING THE NCURSES VISUALIZER
+------------------------------------------
 
+There are many things within the visualizer that can be customized such as the color scheme.
+To modify these colors you may edit the VISCONFIG file.  If you have destroyed, deleted, are getting segfaults please do the following:
+cp VISCONFIG.default VISCONFIG
+This will restore your configuration file to the default state.
+
+------------------------------------------
+4 - NOTES AND DISCLAIMER
+------------------------------------------
+
+NOTE: 
 If for any reason the visualizer does not exit cleanly and the terminal is bugged, type "reset" into your bash prompt and hit enter.
-Note: This works even if you cannot see the text.
+This works even if you cannot see the text.
 
-
+Disclaimer:  
+This program is provided as is without any guarantees or warranty.
+Although the author has attempted to find and correct any bugs in the program, the author is not responsible for any damage or losses of any kind caused by the use or misuse of the program.
+The author is under no obligation to provide support, service, corrections, or upgrades to the program.
