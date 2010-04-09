@@ -19,16 +19,16 @@
 class Viscontrol : public Window
 {
   private:   
+    #if 0
     int currentMode; // Play/Pause
     int frameNumber;
     int speed;	// How fast should we Play/Rewind
+    #endif
     
     Gameboard *gameboard;
     Scoreboard *score;
     Plantinfo *plantInfo;
     Minimap *minimap;
-
-    int playSpeed;
     
     Game *game;
        

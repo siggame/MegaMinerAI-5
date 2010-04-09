@@ -32,6 +32,9 @@ class visettings
   ATTRIBUTE( int, maxY )
   ATTRIBUTE( int, boardX )
   ATTRIBUTE( int, boardY )
+  
+  ATTRIBUTE( Game *, game )
+  
   ATTRIBUTE( GameState *, state )
   ATTRIBUTE( Plant *, plant )
   ATTRIBUTE( int, turnNumber )
@@ -63,6 +66,16 @@ class visettings
   ATTRIBUTE( int, defaultF )
   ATTRIBUTE( int, defaultB )
   
+  ATTRIBUTE( bool, alwaysWin );
+  
+  ATTRIBUTE( int, currentMode );
+  ATTRIBUTE( int, frameNumber );
+  ATTRIBUTE( int, speed );
+  
+  ATTRIBUTE( int, playSpeed );
+  
+  ATTRIBUTE( char *, player1Name );
+  ATTRIBUTE( char *, player2Name );
   
   public:
     static visettings *inst;

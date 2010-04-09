@@ -18,7 +18,7 @@ void Scoreboard::update()
   wattrset( mWindow, COLOR_PAIR( PLAYER_1_COLOR ) );
   mvwprintw( mWindow, line++, 2, "---------------------------" );
   wattron( mWindow, A_BOLD );
-  mvwprintw( mWindow, line++, 3, "Player 1" );
+  mvwprintw( mWindow, line++, 3, getAttr( player1Name ) );
   wattroff( mWindow, A_BOLD );
   mvwprintw( mWindow, line++, 2, "---------------------------" );
   mvwprintw( mWindow, line++, 3, "Score: %d       ", getAttr( player1Score ) );
@@ -30,7 +30,7 @@ void Scoreboard::update()
   
   mvwprintw( mWindow, line++, 2, "---------------------------" );
   wattron( mWindow, A_BOLD );
-  mvwprintw( mWindow, line++, 3, "Player 2" );
+  mvwprintw( mWindow, line++, 3, getAttr( player2Name ) );
   wattroff( mWindow, A_BOLD );
   mvwprintw( mWindow, line++, 2, "---------------------------" );
   mvwprintw( mWindow, line++, 3, "Score: %d       ", getAttr( player2Score ) );

@@ -2,8 +2,16 @@
 
 # Enable or Disable the Winning Player Animation at the End
 winAnimation = true
+# Win Animation Always Plays on Last Frame
+AlwaysPlayWin = false
 
+# Default Play Speed
+DefaultSpeed = 75
 
+# ----------------------------------------------------
+#               COLOR CONFIGURATION
+# ----------------------------------------------------
+# 
 # HERE YOU CAN CONFIGURE THE COLORS FOR THE NCURSES VISUALIZER
 # YOU WILL NEED TO INPUT THE COLOR CODES FOR EACH DESIRED COLOR
 #
@@ -24,7 +32,7 @@ P1PieceForeground = 7
 P1PieceBackground = 1
 #     Player 2
 P2PieceForeground = 7
-P2PieceBackground = 5
+P2PieceBackground = 4
 
 
 # Colors of the Player Text
@@ -32,7 +40,7 @@ P2PieceBackground = 5
 P1TextForeground = 1
 P1TextBackground = 0
 #     Player 2
-P2TextForeground = 5
+P2TextForeground = 4
 P2TextBackground = 0
 
 # Instructions Colors

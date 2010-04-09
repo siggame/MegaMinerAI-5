@@ -38,6 +38,8 @@ char winsText[][41] = {
 "     | |/\\| | | | | . ` | `--. \\ |      ",
 "     \\  /\\  /_| |_| |\\  |/\\__/ /_|      ",
 "      \\/  \\/ \\___/\\_| \\_/\\____/(_)      ",
+"                                        ",
+"       Press Any Key To Continue        ",
 "                                        "
 };
 
@@ -175,14 +177,15 @@ void Gameboard::newState( )
   
   update();
   
-  if( getAttr( turnNumber ) == 499 && getAttr( winAnimation ) )
+  if( getAttr( turnNumber ) == getAttr( game )->states.size()-1 && getAttr( winAnimation ) )
   {
     if( getAttr( player1Score ) >= getAttr( player2Score ) )
       playWinAnim( 1 );
     else
       playWinAnim( 2 );
     
-    setAttr( winAnimation, false );
+    if( !getAttr( alwaysWin ) )
+      setAttr( winAnimation, false );
   }
   
 }
@@ -234,7 +237,7 @@ void Gameboard::playWinAnim( int player )
   
   offsetY += 6;
   
-  for( int i = 0; i < 7; i++ )
+  for( int i = 0; i < 9; i++ )
   {
     for( int j = 0; j < 40; j++ )
     {
@@ -251,5 +254,12 @@ void Gameboard::playWinAnim( int player )
   wattroff( mWindow, A_BOLD );
   timeout( -1 );
   c = getch();
+  
+  setAttr( frameNumber, getAttr( game )->states.size()-2 );
+  setAttr( turnNumber, getAttr( game )->states.size()-2 );
+  setAttr( currentMode, 1 );
+  setAttr( speed, -1 );
+  
+  newState();
 }
 
