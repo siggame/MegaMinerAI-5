@@ -120,8 +120,9 @@ class Match(DefaultGameWorld):
     def declareWinner(self, winner):
         self.winner = winner
         self.turn = None
-
-        msg = ["game-winner", self.id, self.winner.user, self.getPlayerIndex(self.winner)]
+        winnerIndex = self.getPlayerIndex(self.winner)
+        msg = ["game-winner", self.id, self.winner.user,winnerIndex]
+        self.scribe.addTag(str(winnerIndex))
         self.scribe.writeSExpr(msg)
         self.scribe.finalize()
         self.removePlayer(self.scribe)
