@@ -183,6 +183,7 @@ class TestGameLogic(unittest.TestCase):
         expected = ["game-winner", 7001, "Username", 0]
         self.assertEqual(self.players[0].messages[-1], expected)
         self.assertEqual(self.game.winner, self.players[0])
+        self.assertEqual(self.players[1].score, 0)
 
 
     def test_animations(self):

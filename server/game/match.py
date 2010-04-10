@@ -100,8 +100,10 @@ class Match(DefaultGameWorld):
             if not player0died and not player1died:
                 break
         if player0died:
+            self.players[0].score = 0
             self.declareWinner(self.players[1])
         if player1died:
+            self.players[1].score = 0
             self.declareWinner(self.players[0])
 
         if (self.turnNum >= self.turnLimit):
