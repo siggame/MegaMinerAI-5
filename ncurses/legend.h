@@ -12,5 +12,6 @@
 #define PLAYER_1_PIECE_COLOR 5
 #define PLAYER_2_PIECE_COLOR 6
 #define BACKGROUND_COLOR 7
+#define DEFAULT_COLOR 21
 
 #endif

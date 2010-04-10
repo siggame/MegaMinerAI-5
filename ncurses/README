@@ -15,6 +15,9 @@ Table of Contents
 1 - RUNNING THE VISUALIZER
 ------------------------------------------
 
+Before using putty to run the visualizer it is suggested that you double click on defaultPutty.reg to install default putty settings.
+If this is not installed before running the visualizer, various artifacts may disrupt the visualizer.
+
 To run visualizer:
 ./visualizer megazord.gamelog
 where megazord is your gamelog name

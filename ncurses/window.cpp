@@ -6,7 +6,7 @@ Window::Window( int x, int y, int width, int height )
   mY = y;
   mWidth = width;
   mHeight = height;
-  createWindow();  
+  createWindow();
   wrefresh( mWindow );
 
 }
@@ -14,7 +14,7 @@ Window::Window( int x, int y, int width, int height )
 Window::~Window()
 {
   deleteWindow();
-  
+
 }
 
 void Window::createWindow()
@@ -22,7 +22,7 @@ void Window::createWindow()
   refresh();
   mWindow = newwin( mHeight, mWidth, mY, mX);
   box( mWindow, 0, 0 );
-  wrefresh( mWindow );  
+  wrefresh( mWindow );
 }
 
 void Window::deleteWindow()
@@ -38,7 +38,7 @@ void Window::moveWindow( int x, int y )
   deleteWindow();
   mX = x;
   mY = y;
-  createWindow();  
+  createWindow();
 }
 
 void Window::resizeWindow( int width, int height )
@@ -50,6 +50,6 @@ void Window::resizeWindow( int width, int height )
 }
 
 void Window::update()
-{ 
+{
   wrefresh( mWindow );
 }
