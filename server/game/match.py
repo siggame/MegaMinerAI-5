@@ -202,7 +202,7 @@ class Match(DefaultGameWorld):
         return self.objects[plantID].talk(message)
 
     def addTag(self, message):
-        self.scribe.addTag(message, self.players.index(self.turn))
+        return self.scribe.addTag(message, self.players.index(self.turn))
 
 loadClassDefaults()
 
