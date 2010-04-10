@@ -14,7 +14,7 @@ using namespace std;
    Config files contains lines with name-value assignements in the form "<name> = <value>".
    Trailing and leading whitespace is stripped. Parsed config entries are stored in
    a symbol map.
-   
+
    Lines beginning with '#' are a comment and ignored.
 
    Config files may be structured (to arbitrary depth). To start a new config sub group
@@ -39,7 +39,7 @@ class Config {
 		Config(string configFile, char** envp = 0);
 
 		~Config();
-		
+
 		// get string config entry
 		string pString(string name);
 
@@ -81,7 +81,7 @@ class Config {
 		void symbolExpand(string& s);
 		void symbolExpand(map<string, string>& symbols, string& s);
 		void envSymbolExpand(string& s);
-		
+
 		// config group symbol map
 		map<string, string> symbols;
 

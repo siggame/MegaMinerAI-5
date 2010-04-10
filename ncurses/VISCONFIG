@@ -6,7 +6,7 @@ winAnimation = true
 AlwaysPlayWin = false
 
 # Default Play Speed
-DefaultSpeed = 75
+DefaultSpeed = 45
 
 # ----------------------------------------------------
 #               COLOR CONFIGURATION
@@ -56,5 +56,8 @@ SelectionForeground = 0
 SelectionBackground = 6
 
 # Default
-DefaultForeground = 6
-DefaultBackground = 5
+DefaultForeground = 7
+DefaultBackground = 0
+
+STARTPAUSE = 1000
+ENDPAUSE = 4500
