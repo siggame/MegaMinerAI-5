@@ -235,7 +235,7 @@ class TestGameLogic(unittest.TestCase):
         self.game.addTag("tags!")
         self.game.removeObject(self.game.objects[1])
         self.game.nextTurn()
-        expected = "7001, Username, Username\nfirst player tag\n" \
+        expected = "7001, Username, Username, 0\nfirst player tag\n" \
                   +  "second, player, tags!\n"
         file = open(filename, 'r')
         self.assertEqual(file.read(), expected)
