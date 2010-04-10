@@ -20,8 +20,11 @@ class BaseAI
 protected:
   std::vector<Plant> plants;
 public:
+  ///The number of rows on the grid
   int boardX();
+  ///The number of columns on the grid
   int boardY();
+  ///The identifier for this game. Matches the gamelog
   int gameNumber();
   ///Player 0's light
   int player0Light();
@@ -33,6 +36,7 @@ public:
   int player1Score();
   ///Player Number; either 0 or 1
   int playerID();
+  ///The current turn number. The first turn number is 0
   int turnNumber();
   
   ///
