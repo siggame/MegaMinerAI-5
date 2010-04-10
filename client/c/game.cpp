@@ -354,7 +354,7 @@ DLLEXPORT int networkLoop(int socket)
     expression = expression->list;
     if(expression->val != NULL && strcmp(expression->val, "game-winner") == 0)
     {
-      expression = expression->next;
+      expression = expression->next->next->next;
       int winnerID = atoi(expression->val);
       if(winnerID == playerID)
       {
