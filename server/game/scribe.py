@@ -23,9 +23,12 @@ class Scribe:
         log.write(sexpr2str(message))
 
     def addTag(self, message, playerIndex = -1):
+        if '\n' in message:
+            return "tags can not contain newlines."
         if (self.tags[playerIndex+1] != ""):
             message = ", %s"%(message,)
         self.tags[playerIndex + 1] += message
+        return True
 
     def finalize(self):
         compressedLog = bz2.BZ2File("%s.bz2"%(self.logPath,), "w")

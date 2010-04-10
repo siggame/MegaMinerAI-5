@@ -205,6 +205,9 @@ def endTurn(self, expression):
 def addTag(self, expression):
     if games[self.game].turn != self:
         return False
-    games[self.game].addTag(expression[1])
+    errBuff = games[self.game].addTag(expression[1])
+    if errBuff != True:
+        self.writeSExpr(['add-tag-denied', errBuff])
+        return False
     return True
 
