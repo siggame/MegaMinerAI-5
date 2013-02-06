@@ -1,18 +1,42 @@
 #ifndef GP_H
 #define GP_H
-#include "player.h"
+#include "AI.h"
+#include "playGame.h"
 #include <vector>
+
 using namespace std;
+
+struct GameInfo
+{
+  AI fp,sp;
+  int results;
+  GameInfo(){}
+  GameInfo(AI& FP,AI& SP):fp(FP),sp(SP){}
+  void set(AI& FP,AI& SP){fp=FP;sp=SP;};
+};
+//used to control who is outputing
+//pthread_mutex_t screen;
+
 class GP
 {
   private:
-    vector<Player> pop;
+    vector<AI> pop,mutant;
     //Stores the indexs of where the parents are
     vector<unsigned int> parent;
     //Stores the indexs of where the children will be
     vector<unsigned int> child;
+    vector<unsigned int> perm;
+    vector<unsigned int> lilp;
+    //location of the server to compete on
+    char* host;
+    //list of where the first round losers are
+    vector<unsigned int> lost;
+    vector<unsigned int> top;
+    
+    int redWin,bluWin;    
   public:
-    GP();
+    //GP();
+    GP(char* Host,unsigned int popSize);
     //Pre:  None
     //Post: Sets up Pop, auto run with constructor
     void initialize();
@@ -31,7 +55,12 @@ class GP
     //Post: Recombines parents from parent vector into children
     void recombination();
     
+    void topTeir();
+    
+    void popDump();
 
 };
+
+
 #endif
 

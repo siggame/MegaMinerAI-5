@@ -1,0 +1,146 @@
+#include "gp.h"
+
+
+GP::GP(char* Host,unsigned int popSize)
+{
+  host=Host;
+  pop.resize(popSize);
+  mutant.resize(popSize);
+  parent.resize(popSize/2);
+  lost.resize(popSize/2);
+  child.resize(popSize/4);
+  pid.resize(popSize);
+  info.resize(popSize);
+  for(unsigned int i=0;i<pop.size();i+=2)
+  {
+    pop[i].name="GAIB0";//evens are zero
+    pop[i].pass="goldmancheats";
+  }
+  for(unsigned int i=1;i<pop.size();i+=2)
+  {
+    pop[i].name="GAIB1";//odds are 1
+    pop[i].pass="goldmancheats";
+  }
+
+}
+void GP::initialize()
+{
+  
+}
+
+void GP::selfImprovePop()
+{
+  int results;
+  //Thread Here
+  for(unsigned int i=0;i<pop.size();i++)
+  {
+    mutant[i]=pop[i];
+    //TODO put mutation in here
+    if(!playGame(pop[i],mutant[i],host,results))
+    {
+      cerr<<"GAIB: playGame failed during mutation step"<<endl;
+    }
+    //if the original LOST
+    if(results<0)
+    {
+      pop[i]=mutant[i];
+    }  
+  }  
+}
+
+
+void* compHelper(void* arg)
+{
+  cout<<"In compHelper"<<endl;
+  char* host="localhost";
+  GameInfo* info = (GameInfo*)arg;
+  if(!playGame(info->fp,info->sp,host,info->results))
+  {
+    cerr<<"GAIB Failed to play a threaded game"<<endl;
+  }
+  cout<<"Returning from compHelper"<<endl;
+  return arg;
+}
+
+void GP::competition()
+{
+  //Thread here
+  unsigned int i=0;
+  //for(unsigned int i=0;i<pop.size()-1;i+=2)
+  {
+    //TODO May be a good idea to play 2 games, so each AI can be first player
+    //load game info
+    cout<<"Thread create loop: "<<i<<endl;
+    //info[i/2].set(pop[i],pop[i+1]);
+    //call the thread
+    //pthread_create(&(pid[i/2]),NULL, compHelper,(void*)(&(info[i/2]) ) );
+    
+    info[0].set(pop[0],pop[1]);
+    info[1].set(pop[2],pop[3]);
+    pthread_create(&(pid[0]),NULL, compHelper,(void*)(&(info[0]) ) );
+     
+    pthread_create(&(pid[1]),NULL, compHelper,(void*)(&(info[1]) ) );
+    pthread_join(pid[0],NULL);
+    pthread_join(pid[1],NULL);
+    
+    cout<<"Past create"<<endl;
+  }
+  //join the threads
+  //for(unsigned int i=0;i<pop.size()/2;i++)
+  {
+    cout<<"Thread join "<<i<<endl;
+   
+    //if player 1 won
+    if(info[0].results>0)
+    {
+      cout<<"First Player Wins!"<<endl;
+      //first round winners = parents
+ //     parent[i]=i*2;
+ //     lost[i]=i*2+1;
+    }
+    else
+    {
+      cout<<"Second Player Wins!"<<endl;
+  //    parent[i]=i*2+1;
+  //    lost[i]=i*2;
+    }
+  }
+  cout<<"First round over!"<<endl;
+ /* //Thread here
+  int results;
+  for(unsigned int i=0;i<lost.size()-1;i+=2)
+  {
+    //if either game fails
+    if(!playGame(pop[lost[i]],pop[lost[i+1]],host,results))
+    {
+      cerr<<"GAIB: playGame failed during second round of the tournament"<<endl;
+    }
+    if(results>0)
+    {
+      child[i/2]=lost[i+1];
+    }
+    else
+    {
+      child[i/2]=lost[i];
+    }
+  }
+  cout<<"Competition complete!"<<endl;
+  cout<<"Parents: ";
+  for(unsigned int i=0;i<parent.size();i++)
+  {
+    cout<<parent[i]<< " ";
+  }
+  
+  cout<<endl<<"Children: ";
+  for(unsigned int i=0;i<child.size();i++)
+  {
+    cout<<child[i]<< " ";
+  }
+  cout<<endl;
+  */
+}
+
+void GP::recombination()
+{
+
+}

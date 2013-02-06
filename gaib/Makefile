@@ -1,47 +1,43 @@
-SRCS=$(shell ls *.cpp 2> /dev/null)
-CXXOBJ_DEBUG=$(SRCS:.cpp=.od)
-CXXOBJ_RELEASE=$(SRCS:.cpp=.o)
-CSRCS=$(shell ls *.c 2> /dev/null)
-COBJ_DEBUG=$(CSRCS:.c=.od)
-COBJ_RELEASE=$(CSRCS:.c=.o)
-CXX_FLAGS=-W -Wall
-C_FLAGS=-W -Wall
-LD_FLAGS=-W -Wall
-CXX=g++
-CC=gcc
-LD=g++
-RM=rm -f
+sources = $(wildcard *.cpp)
+objects = $(sources:%.cpp=%.o)
+deps = $(sources:%.cpp=%.d)
+CFLAGS += -g
+CXXFLAGS += -g
 
-OBJ_DEBUG=$(shell ls *.od | grep -v main.od| 2> /dev/null)
-OBJ_RELEASE=$(shell ls *.o | grep -v main.o| 2> /dev/null)
-default: debug
+#Uncomment this line  to get a boatload of debug output.
+#CPPFLAGS = -DSHOW_NETWORK
 
-all: debug release
+override CPPFLAGS += -Isexp -O3
 
-debug: main_debug
+all: client libclient.so
 
-release: main
+%.d: %.cpp
+	@set -e; rm -f $@; \
+	(dirname $< | tr '\n' '/'; $(CXX) -MM $(CPPFLAGS) $<) > $@.$$$$; \
+	sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
+	rm -f $@.$$$$
+
+.PHONY: clean all subdirs
+
+libclient_%.o: override CXXFLAGS += -fPIC
+libclient_%.o: %.cpp %.d
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c -o $@ $<
 
 clean:
-	$(RM) *.od *.o main main_debug
+	rm -f $(objects) $(deps) client libclient_network.o libclient_game.o libclient_getters.o libclient_util.o libclient.so
+	$(MAKE) -C sexp clean
 
 extra_clean: clean
+	rm -f *.gamelog
 	rm -f *~
 
-%.od: %.cpp
-	$(CXX) -g $(CXX_FLAGS) -c -o $@ $<
+client: $(objects) sexp/sexp.a
+	$(CXX) $(LDFLAGS) $(LOADLIBES) $(LDLIBS) $^ -g -o client
 
-%.o: %.cpp
-	$(CXX) -O3 $(CXX_FLAGS) -c -o $@ $<
+libclient.so: libclient_network.o libclient_game.o libclient_getters.o libclient_util.o sexp/libclient_sexp.a
+	$(CXX) -shared -Wl,-soname,libclient.so $(LDFLAGS) $(LOADLIBES) $(LDLIBS) $^ -o libclient.so
 
-%.od: %.c
-	$(CC) -g $(C_FLAGS) -c -o $@ $<
+sexp/sexp.a sexp/libclient_sexp.a:
+	$(MAKE) -C $(dir $@) $(notdir $@)
 
-%.o: %.c
-	$(CC) -O3 $(C_FLAGS) -c -o $@ $<
-
-main_debug: $(CXXOBJ_DEBUG) $(COBJ_DEBUG)
-	$(LD) -g  $(LD_FLAGS) $(OBJ_DEBUG) -o $@ $(CXXOBJ_DEBUG) $(COBJ_DEBUG) 
-	
-main: $(CXXOBJ_RELEASE) $(COBJ_RELEASE) 
-	$(LD) -O3 $(LD_FLAGS) $(OBJ_RELEASE) -o $@ $(CXXOBJ_RELEASE) $(COBJ_RELEASE)
+-include $(deps)

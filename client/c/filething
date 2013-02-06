@@ -1,0 +1,6 @@
+for i in `seq 0 600`; 
+do  
+./client localhost &
+sleep 1
+./client localhost $i
+done
